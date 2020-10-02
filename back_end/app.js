@@ -1,6 +1,21 @@
 const express = require('express');
 const saucesRoutes = require('./routes/sauces');
+const mongoose = require('mongoose');
 const app = express();
+require('dotenv').config();
+
+// Connect MongoDB at default port 27017.
+mongoose.connect(process.env.DB_CONNECT, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+}, (err) => {
+    if (!err) {
+        console.log('MongoDB Connection Succeeded.')
+    } else {
+        console.log('Error in DB connection: ' + err)
+    }
+});
+
 
 // body parsers
 app.use(express.json());
