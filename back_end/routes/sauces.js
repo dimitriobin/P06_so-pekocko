@@ -7,6 +7,7 @@ const {
     deleteOneSauce
 } = require('../controllers/sauces');
 const auth = require('../middleware/auth');
+const multer = require('../middleware/multer-config');
 
 // //////////////////////
 // GET ALL Sauces ///////
@@ -23,13 +24,13 @@ router.get('/:id', auth, getOneSauce);
 // //////////////////////
 // CREATE ONE Sauce ///////
 // //////////////////////
-router.post('/', auth, createOneSauce);
+router.post('/', auth, multer, createOneSauce);
 
 
 // //////////////////////
 // UPDATE ONE Sauce ///////
 // //////////////////////
-router.put('/:id', auth, updateOneSauce);
+router.put('/:id', auth, multer, updateOneSauce);
 
 
 // //////////////////////

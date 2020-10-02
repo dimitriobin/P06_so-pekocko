@@ -2,6 +2,7 @@ const express = require('express');
 const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
 const mongoose = require('mongoose');
+const path = require('path');
 const app = express();
 require('dotenv').config();
 
@@ -17,11 +18,6 @@ mongoose.connect(process.env.DB_CONNECT, {
     }
 });
 
-
-// body parsers
-app.use(express.json());
-app.use(express.urlencoded());
-
 // Deal with CORS policy
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -29,6 +25,13 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
+
+// body parsers
+app.use(express.json());
+app.use(express.urlencoded());
+
+// Serve static assets
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Get routes
 app.use('/api/sauces', saucesRoutes);
