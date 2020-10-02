@@ -6,35 +6,36 @@ const {
     updateOneSauce,
     deleteOneSauce
 } = require('../controllers/sauces');
+const auth = require('../middleware/auth');
 
 // //////////////////////
 // GET ALL Sauces ///////
 // //////////////////////
-router.get('/', getAllSauces);
+router.get('/', auth, getAllSauces);
 
 
 // //////////////////////
 // GET ONE Sauce ///////
 // //////////////////////
-router.get('/:id', getOneSauce);
+router.get('/:id', auth, getOneSauce);
 
 
 // //////////////////////
 // CREATE ONE Sauce ///////
 // //////////////////////
-router.post('/', createOneSauce);
+router.post('/', auth, createOneSauce);
 
 
 // //////////////////////
 // UPDATE ONE Sauce ///////
 // //////////////////////
-router.put('/:id', updateOneSauce);
+router.put('/:id', auth, updateOneSauce);
 
 
 // //////////////////////
 // DELETE ONE Sauce ///////
 // //////////////////////
-router.delete('/:id', deleteOneSauce);
+router.delete('/:id', auth, deleteOneSauce);
 
 
 
