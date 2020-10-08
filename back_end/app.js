@@ -6,7 +6,9 @@ const path = require('path');
 const app = express();
 require('dotenv').config();
 
-// Connect MongoDB at default port 27017.
+//////////////////////////////////////////////
+// Connect MongoDB
+//////////////////////////////////////////////
 mongoose.connect(process.env.DB_CONNECT, {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -18,7 +20,9 @@ mongoose.connect(process.env.DB_CONNECT, {
     }
 });
 
+//////////////////////////////////////////////
 // Deal with CORS policy
+//////////////////////////////////////////////
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -26,14 +30,29 @@ app.use((req, res, next) => {
     next();
 });
 
-// body parsers
-app.use(express.json());
-app.use(express.urlencoded());
+//////////////////////////////////////////////
+// body parsers and request's size limitations
+//////////////////////////////////////////////
+app.use(express.urlencoded({
+    limit: "1kb"
+}));
+app.use(express.json({
+    limit: "1kb"
+}));
+app.use(express.multipart({
+    limit: "10mb"
+}));
+app.use(express.limit("5kb")); // this will be valid for every other content type
 
+
+//////////////////////////////////////////////
 // Serve static assets
+//////////////////////////////////////////////
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
+//////////////////////////////////////////////
 // Get routes
+//////////////////////////////////////////////
 app.use('/api/sauces', saucesRoutes);
 app.use('/api/auth', userRoutes);
 
