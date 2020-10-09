@@ -5,7 +5,11 @@ const {
     login
 } = require('../controllers/user');
 
-router.post('/signup', signup);
-router.post('/login', login);
+const {
+    inputValidation
+} = require('../middleware/validation');
+
+router.post('/signup', inputValidation, signup);
+router.post('/login', inputValidation, login);
 
 module.exports = router;

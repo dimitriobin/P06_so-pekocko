@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 //////////////////////////////////////////////
-// body parsers and request's size limitations
+// body parsers
 //////////////////////////////////////////////
 app.use(express.urlencoded({
     limit: "1kb"
@@ -39,10 +39,6 @@ app.use(express.urlencoded({
 app.use(express.json({
     limit: "1kb"
 }));
-app.use(express.multipart({
-    limit: "10mb"
-}));
-app.use(express.limit("5kb")); // this will be valid for every other content type
 
 
 //////////////////////////////////////////////
