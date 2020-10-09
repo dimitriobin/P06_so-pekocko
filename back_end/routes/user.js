@@ -6,10 +6,11 @@ const {
 } = require('../controllers/user');
 
 const {
-    inputValidation
+    validation,
+    validationResult
 } = require('../middleware/validation');
 
-router.post('/signup', inputValidation, signup);
-router.post('/login', inputValidation, login);
+router.post('/signup', validation, validationResult, signup);
+router.post('/login', validation, validationResult, login);
 
 module.exports = router;
