@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 const morgan = require('morgan');
+const toobusy = require('toobusy-js');
 const app = express();
 require('dotenv').config();
 
@@ -47,6 +48,18 @@ app.use(express.json({
 // Serve static assets
 //////////////////////////////////////////////
 app.use('/images', express.static(path.join(__dirname, 'images')));
+
+//////////////////////////////////////////////
+// Secure the event-loop against DoS attacks
+//////////////////////////////////////////////
+app.use((req, res, next) => {
+    if (toobusy()) {
+        // log if you see necessary
+        res.send(503, "Server Too Busy");
+    } else {
+    next();
+    }
+});
 
 //////////////////////////////////////////////
 // Set up a logger with morgan
