@@ -9,6 +9,7 @@ const {
 } = require('../controllers/sauces');
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
+const {sauceInputValidation} = require('../middleware/inputValidation');
 
 // //////////////////////
 // GET ALL Sauces ///////
@@ -25,13 +26,13 @@ router.get('/:id',auth, getOneSauce);
 // //////////////////////
 // CREATE ONE Sauce ///////
 // //////////////////////
-router.post('/',auth, multer, createOneSauce);
+router.post('/',auth, multer, sauceInputValidation, createOneSauce);
 
 
 // //////////////////////
 // UPDATE ONE Sauce ///////
 // //////////////////////
-router.put('/:id',auth, multer, updateOneSauce);
+router.put('/:id',auth, multer, sauceInputValidation, updateOneSauce);
 
 
 // //////////////////////
