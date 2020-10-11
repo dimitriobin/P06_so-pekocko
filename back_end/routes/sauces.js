@@ -13,36 +13,36 @@ const multer = require('../middleware/multer-config');
 // //////////////////////
 // GET ALL Sauces ///////
 // //////////////////////
-router.get('/', auth, getAllSauces);
+router.get('/',auth, getAllSauces);
 
 
 // //////////////////////
 // GET ONE Sauce ///////
 // //////////////////////
-router.get('/:id', auth, getOneSauce);
+router.get('/:id',auth, getOneSauce);
 
 
 // //////////////////////
 // CREATE ONE Sauce ///////
 // //////////////////////
-router.post('/', auth, multer, createOneSauce);
+router.post('/',auth, multer, createOneSauce);
 
 
 // //////////////////////
 // UPDATE ONE Sauce ///////
 // //////////////////////
-router.put('/:id', auth, multer, updateOneSauce);
+router.put('/:id',auth, multer, updateOneSauce);
 
 
 // //////////////////////
 // DELETE ONE Sauce ///////
 // //////////////////////
-router.delete('/:id', auth, deleteOneSauce);
+router.delete('/:id',auth, deleteOneSauce);
 
 // //////////////////////
 // LIKE ONE Sauce ///////
 // //////////////////////
-router.post('/:id/like', auth, likeOneSauce);
+router.post('/:id/like',auth, likeOneSauce);
 
 
 
