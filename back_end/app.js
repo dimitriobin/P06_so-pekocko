@@ -3,6 +3,8 @@ const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
 const mongoose = require('mongoose');
 const path = require('path');
+const fs = require('fs');
+const morgan = require('morgan');
 const app = express();
 require('dotenv').config();
 
@@ -45,6 +47,21 @@ app.use(express.json({
 // Serve static assets
 //////////////////////////////////////////////
 app.use('/images', express.static(path.join(__dirname, 'images')));
+
+//////////////////////////////////////////////
+// Set up a logger with morgan
+//////////////////////////////////////////////
+// log all errors to errors.log
+app.use(morgan('common', {
+    stream: fs.createWriteStream('./activity/errors.log', { flags: 'a' }),
+    skip: function (req, res) { return res.statusCode < 400 }
+  }));
+   
+// log all requests to access.log
+app.use(morgan('common', {
+stream: fs.createWriteStream('./activity/access.log', { flags: 'a' })
+}));
+
 
 //////////////////////////////////////////////
 // Get routes
