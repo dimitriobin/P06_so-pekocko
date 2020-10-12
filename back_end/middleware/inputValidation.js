@@ -1,3 +1,4 @@
+'use strict'
 const Joi = require('joi');
 
 const strongPasswordRegex = new RegExp(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/);

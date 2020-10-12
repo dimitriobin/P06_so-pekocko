@@ -62,3 +62,12 @@
 ::1 - - [12/Oct/2020:09:10:46 +0000] "GET /api/sauces HTTP/1.1" 200 465
 ::1 - - [12/Oct/2020:09:10:47 +0000] "GET /api/sauces HTTP/1.1" 200 465
 ::1 - - [12/Oct/2020:09:10:50 +0000] "GET /api/sauces HTTP/1.1" 200 465
+::1 - - [12/Oct/2020:09:47:13 +0000] "POST /api/auth/login HTTP/1.1" 403 3519
+::1 - - [12/Oct/2020:12:00:36 +0000] "OPTIONS /api/auth/signup HTTP/1.1" 200 4
+::1 - - [12/Oct/2020:12:00:37 +0000] "POST /api/auth/signup HTTP/1.1" 201 34
+::1 - - [12/Oct/2020:12:00:37 +0000] "OPTIONS /api/auth/login HTTP/1.1" 200 4
+::1 - - [12/Oct/2020:12:00:37 +0000] "POST /api/auth/login HTTP/1.1" 200 224
+::1 - - [12/Oct/2020:12:00:37 +0000] "OPTIONS /api/sauces HTTP/1.1" 200 13
+::1 - - [12/Oct/2020:12:00:38 +0000] "GET /api/sauces HTTP/1.1" 304 -
+::1 - - [12/Oct/2020:12:01:19 +0000] "OPTIONS /api/sauces/5f82efd896023c3290f5d9f8 HTTP/1.1" 200 19
+::1 - - [12/Oct/2020:12:01:19 +0000] "GET /api/sauces/5f82efd896023c3290f5d9f8 HTTP/1.1" 200 463

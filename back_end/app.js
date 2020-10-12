@@ -1,3 +1,4 @@
+'use strict'
 const express = require('express');
 const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
@@ -5,9 +6,11 @@ const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 const morgan = require('morgan');
+const helmet = require('helmet');
 const toobusy = require('toobusy-js');
 const rateLimit = require("express-rate-limit");
 const slowDown = require('express-slow-down');
+const session =require('express-session');
 const app = express();
 require('dotenv').config();
 
@@ -26,6 +29,20 @@ mongoose.connect(process.env.DB_CONNECT, {
 });
 
 //////////////////////////////////////////////
+// Set up a logger with morgan
+//////////////////////////////////////////////
+// log all errors to errors.log
+app.use(morgan('common', {
+    stream: fs.createWriteStream('./activity/errors.log', { flags: 'a' }),
+    skip: function (req, res) { return res.statusCode < 400 }
+  }));
+   
+// log all requests to access.log
+app.use(morgan('common', {
+stream: fs.createWriteStream('./activity/access.log', { flags: 'a' })
+}));
+
+//////////////////////////////////////////////
 // Deal with CORS policy
 //////////////////////////////////////////////
 app.use((req, res, next) => {
@@ -35,21 +52,42 @@ app.use((req, res, next) => {
     next();
 });
 
+
 //////////////////////////////////////////////
 // body parsers
 //////////////////////////////////////////////
 app.use(express.urlencoded({
-    limit: "1kb"
+    limit: "1kb",
+    extended: false
 }));
 app.use(express.json({
     limit: "1kb"
 }));
+
+//////////////////////////////////////////////
+// Set some secure headers with helmet.js
+//////////////////////////////////////////////
+app.use(helmet());
+
 
 
 //////////////////////////////////////////////
 // Serve static assets
 //////////////////////////////////////////////
 app.use('/images', express.static(path.join(__dirname, 'images')));
+
+//////////////////////////////////////////////
+// Express Session Middleware
+//////////////////////////////////////////////
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        sameSite: true
+    }
+  }))
 
 //////////////////////////////////////////////
 // Secure the event-loop against DoS attacks
@@ -87,25 +125,13 @@ const speedLimiter = slowDown({
   delayMs: 500 // begin adding 500ms of delay per request above 100:
 });
 
-//////////////////////////////////////////////
-// Set up a logger with morgan
-//////////////////////////////////////////////
-// log all errors to errors.log
-app.use(morgan('common', {
-    stream: fs.createWriteStream('./activity/errors.log', { flags: 'a' }),
-    skip: function (req, res) { return res.statusCode < 400 }
-  }));
-   
-// log all requests to access.log
-app.use(morgan('common', {
-stream: fs.createWriteStream('./activity/access.log', { flags: 'a' })
-}));
+
 
 
 //////////////////////////////////////////////
 // Get routes
 //////////////////////////////////////////////
-app.use('/api/sauces', sauceLimiter, speedLimiter, saucesRoutes);
-app.use('/api/auth', registerLimiter, speedLimiter, userRoutes);
+app.use('/api/sauces',  sauceLimiter, speedLimiter, saucesRoutes);
+app.use('/api/auth',  registerLimiter, speedLimiter, userRoutes);
 
 module.exports = app;

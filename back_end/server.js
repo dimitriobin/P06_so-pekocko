@@ -1,9 +1,6 @@
+'use strict'
 const http = require('http');
 const app = require('./app');
-const {
-    logger
-} = require('./middleware/logger');
-require('dotenv').config();
 
 const normalizePort = val => {
     const port = parseInt(val, 10);
