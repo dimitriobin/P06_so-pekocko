@@ -6,6 +6,8 @@ const path = require('path');
 const fs = require('fs');
 const morgan = require('morgan');
 const toobusy = require('toobusy-js');
+const rateLimit = require("express-rate-limit");
+const slowDown = require('express-slow-down');
 const app = express();
 require('dotenv').config();
 
@@ -61,6 +63,30 @@ app.use((req, res, next) => {
     }
 });
 
+
+ 
+//////////////////////////////////////////////
+// Create a rate limitation
+//////////////////////////////////////////////
+const sauceLimiter = rateLimit({
+    windowMs: 10 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+  });
+
+const registerLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 5 // limit each IP to 100 requests per windowMs
+});
+
+//////////////////////////////////////////////
+// Slow down each requests made back to back to discourage spamming the API
+//////////////////////////////////////////////
+const speedLimiter = slowDown({
+  windowMs: 30 * 1000, // 30 sec
+  delayAfter: 5, // allow 10 requests per 30 seconds, then...
+  delayMs: 500 // begin adding 500ms of delay per request above 100:
+});
+
 //////////////////////////////////////////////
 // Set up a logger with morgan
 //////////////////////////////////////////////
@@ -79,7 +105,7 @@ stream: fs.createWriteStream('./activity/access.log', { flags: 'a' })
 //////////////////////////////////////////////
 // Get routes
 //////////////////////////////////////////////
-app.use('/api/sauces', saucesRoutes);
-app.use('/api/auth', userRoutes);
+app.use('/api/sauces', sauceLimiter, speedLimiter, saucesRoutes);
+app.use('/api/auth', registerLimiter, speedLimiter, userRoutes);
 
 module.exports = app;
