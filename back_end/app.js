@@ -1,19 +1,21 @@
 'use strict'
 const express = require('express');
-const saucesRoutes = require('./routes/sauces');
-const userRoutes = require('./routes/user');
-const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
+const mongoose = require('mongoose');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const toobusy = require('toobusy-js');
 const rateLimit = require("express-rate-limit");
 const slowDown = require('express-slow-down');
 const session =require('express-session');
-const app = express();
+const cors = require('cors');
 require('dotenv').config();
 
+const app = express();
+
+const saucesRoutes = require('./routes/sauces');
+const userRoutes = require('./routes/user');
 //////////////////////////////////////////////
 // Connect MongoDB
 //////////////////////////////////////////////
@@ -45,12 +47,7 @@ stream: fs.createWriteStream('./activity/access.log', { flags: 'a' })
 //////////////////////////////////////////////
 // Deal with CORS policy
 //////////////////////////////////////////////
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
-});
+app.use(cors());
 
 
 //////////////////////////////////////////////

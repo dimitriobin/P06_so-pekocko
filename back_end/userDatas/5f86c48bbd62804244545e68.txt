@@ -1,0 +1,15 @@
+{
+  likes: 0,
+  dislikes: 0,
+  usersLiked: [],
+  usersDisliked: [],
+  _id: 5f86c954548cfa037cb8baa1,
+  name: 'test',
+  manufacturer: 'test',
+  description: 'test',
+  mainPepper: 'test',
+  heat: 2,
+  userId: '5f86c48bbd62804244545e68',
+  imageUrl: 'http://localhost:3000/images/vin-blanc-ciboulette.jpg1602668884159.jpg',
+  __v: 0
+}

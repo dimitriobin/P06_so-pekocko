@@ -12,7 +12,13 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    birthdate: {
+        type: Date
+    },
+    parentEmail: {
+        type: String,
+    },
 });
 
 userSchema.plugin(uniqueValidator);
