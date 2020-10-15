@@ -19,6 +19,20 @@ const userSchema = mongoose.Schema({
     parentEmail: {
         type: String,
     },
+    restricted: {
+        type: Boolean,
+        default: true
+    },
+    consents: {
+        shareWithPartners: {
+            type: Boolean,
+            default: false
+        },
+        contactable: {
+            type: Boolean,
+            default: false
+        }
+    }
 });
 
 userSchema.plugin(uniqueValidator);

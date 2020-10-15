@@ -1,6 +1,9 @@
 'use strict'
-const http = require('http');
-const app = require('./app');
+const https = require('https');
+const fs = require('fs');
+var app = require('./app');
+
+const port = process.env.PORT;
 
 const normalizePort = val => {
     const port = parseInt(val, 10);
@@ -36,9 +39,13 @@ const errorHandler = error => {
     }
 };
 
+const options = {
+    key: fs.readFileSync('./cert/selfsigned.key'),
+    cert: fs.readFileSync('./cert/selfsigned.crt')
+};
 
 
-const server = http.createServer(app);
+const server = https.createServer(options, app);
 
 server.on('error', errorHandler);
 server.on('listening', () => {
