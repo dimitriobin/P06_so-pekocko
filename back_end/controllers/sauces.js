@@ -8,9 +8,10 @@ exports.getAllSauces = (req, res, next) => {
         res.status(200).json(sauces);
     })
     .catch(error => {
-        res.status(400).send(error);
+        res.status(400).send('Requête invalide');
     })
 };
+
 
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({
@@ -20,7 +21,7 @@ exports.getOneSauce = (req, res, next) => {
         res.status(200).json(sauce);
     })
     .catch(error => {
-        res.status(400).send(error);
+        res.status(400).send('Requête invalide');
     })
 };
 
@@ -38,7 +39,7 @@ exports.createOneSauce = (req, res, next) => {
         });
     })
     .catch(error => {
-        res.status(400).send(error);
+        res.status(400).send('Requête invalide');
     })
 };
 
@@ -61,30 +62,30 @@ exports.updateOneSauce = (req, res, next) => {
             });
         })
         .catch(error => {
-            res.status(400).send(error);
+            res.status(400).send('Requête invalide');
         })
 };
 
 exports.deleteOneSauce = (req, res, next) => {
-        Sauce.findOne({
-            _id: req.params.id
-        })
-        .then(sauce => {
-            const filename = sauce.imageUrl.split('/images/')[1];
-            fs.unlink(`images/${filename}`, () => {
-                Sauce.deleteOne({
-                    _id: req.params.id
-                })
-                .then(deletedSauce => {
-                    res.status(200).json({
-                        message: 'Cette sauce a été supprimée !'
-                    });
-                })
-                .catch(error => {
-                    res.status(400).send(error);
-                })
-            });
-        })
+    Sauce.findOne({
+        _id: req.params.id
+    })
+    .then(sauce => {
+        const filename = sauce.imageUrl.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {
+            Sauce.deleteOne({
+                _id: req.params.id
+            })
+            .then(deletedSauce => {
+                res.status(200).json({
+                    message: 'Cette sauce a été supprimée !'
+                });
+            })
+            .catch(error => {
+                res.status(400).send('Requête invalide');
+            })
+        });
+    })
     .catch(error => {
         res.status(500).json({
             error
@@ -158,8 +159,6 @@ exports.likeOneSauce = (req, res, next) => {
             })
         })
     .catch(error => {
-        res.status(400).json({
-            error
-        });
+        res.status(400).send('Requête invalide');
     })
 };

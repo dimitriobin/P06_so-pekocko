@@ -11,9 +11,10 @@ module.exports = (req, res, next) => {
         } else {
             next();
         }
-    } catch {
-        res.status(401).json({
-            error: new Error('Invalid request!')
-        });
+    } catch(err) {
+        // res.status(401).json({
+        //     error: new Error('Invalid request!')
+        // });
+        res.status(401).send('Veuillez vous connecter à l\'application')
     }
 };

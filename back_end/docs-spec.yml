@@ -1,0 +1,268 @@
+openapi: "3.0.0"
+info:
+  title: Piquante
+  version: "0.1.0"
+  description: >
+     Parcours developpeur web - projet 06
+host: localhost:3000
+explorer: true
+basePath: /
+paths:
+  /api/sauces:
+    get:
+      tags: [Sauces]
+      summary: Get all sauces
+      description: Return all sauces
+      produces: application/json
+      responses:
+        '200':
+          description: Respond an array of all sauces objects in database
+          content:
+            application/json: 
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SauceResponse'
+        '400':
+          description: Respond with a Bad Request
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Requête invalide
+        '401':
+          description: Respond an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                $ref: '#/components/schemas/errorUnauthorized'
+    post:
+      tags: [Sauces]
+      summary: Create one sauce
+      description: Create a sauce 
+      produces: application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SauceRequest'
+          application/x-www-url-encoded:
+            schema:
+              $ref: '#/components/schemas/SauceRequest'
+      responses:
+        '201':
+          description: Respond with a created ressource
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"message": "Vous avez ajouté une nouvelle sauce !"}
+        '400':
+          description: Respond with a Bad Request
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Requête invalide
+        '401':
+          description: Respond an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                $ref: '#/components/schemas/errorUnauthorized'
+  /api/sauces/:id:
+    get:
+      tags: [Sauces]
+      summary: Get one sauce
+      description: Return the sauce's object
+      produces: application/json
+      responses:
+        '200':
+          description: Respond an object of all properties for this particular id
+          content:
+            application/json: 
+              schema:
+                type: object
+                $ref: '#/components/schemas/SauceResponse'
+        '400':
+          description: Respond with a Bad Request
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Requête invalide
+        '401':
+          description: Respond an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                $ref: '#/components/schemas/errorUnauthorized'
+    put:
+      tags: [Sauces]
+      summary: Update one sauce
+      description: Replace the sauce's object with this new object
+      produces: application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SauceRequest'
+          application/x-www-url-encoded:
+            schema:
+              $ref: '#/components/schemas/SauceRequest'
+      responses:
+        '200':
+          description: Respond a success message
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: Votre sauce a été modifiée !
+        '400':
+          description: Respond with a Bad Request
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Requête invalide
+        '401':
+          description: Respond an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                $ref: '#/components/schemas/errorUnauthorized'
+    delete:
+      tags: [Sauces]
+      summary: Delete one sauce
+      description: Remove the sauce's object from the database
+      produces: application/json
+      responses:
+        '200':
+          description: Respond a success message
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Cette sauce a été supprimée !
+        '400':
+          description: Respond with a Bad Request
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Requête invalide
+        '401':
+          description: Respond an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                $ref: '#/components/schemas/errorUnauthorized'
+        '500':
+          description: Respond an internal error
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": "error"}
+components:
+  schemas:
+    SauceRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+        name:
+          type: string
+        manufacturer:
+          type: string
+        description:
+          type: string
+        mainPepper:
+          type: string
+        imageUrl:
+          type: string
+        heat:
+          type: integer
+          minimum: 0
+          maximum: 10
+      required: 
+        - userId
+        - name
+        - manufacturer
+        - description
+        - mainPepper
+        - imageUrl
+        - heat
+      example:
+        userId: 5f82edcc93475b24f0f30fd2
+        name: tartare
+        manufacturer: sauce company name
+        description: THE real sauce tartare
+        mainPepper: ciboulette
+        imageUrl: 'http://localhost:3000/images/sauceTartare.jpg1602416600065.jpg'
+        heat: 2
+    SauceResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+        name:
+          type: string
+        manufacturer:
+          type: string
+        description:
+          type: string
+        mainPepper:
+          type: string
+        imageUrl:
+          type: string
+        heat:
+          type: integer
+          minimum: 0
+          maximum: 10
+        likes:
+          type: integer
+          minimum: 0
+        dislikes:
+          type: integer
+          minimum: 0
+        usersLiked:
+          type: array
+          items:
+            type: string
+        usersDisliked:
+          type: array
+          items:
+            type: string
+      required: 
+        - userId
+        - name
+        - manufacturer
+        - description
+        - mainPepper
+        - imageUrl
+        - heat
+      example:
+        _id: 5f82efd896023c3290f5d9f8
+        userId: 5f82edcc93475b24f0f30fd2
+        name: tartare
+        manufacturer: sauce company name
+        description: THE real sauce tartare
+        mainPepper: ciboulette
+        imageUrl: 'http://localhost:3000/images/sauceTartare.jpg1602416600065.jpg'
+        heat: 2
+        likes: 3
+        dislikes: 0
+        usersLiked: ["5f82edcc93475b24f0f30fd2", "5f82f7122daab413945e9ea3", "5f831be2d9378833ac04c4b4"]
+        usersDisliked: []
+        __v: 0
+    errorUnauthorized:
+      type: string
+      example: Veuillez vous connecter à l'application

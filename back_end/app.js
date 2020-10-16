@@ -10,12 +10,18 @@ const rateLimit = require("express-rate-limit");
 const slowDown = require('express-slow-down');
 const session =require('express-session');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const yaml = require('js-yaml');
 require('dotenv').config();
 
 const app = express();
 
 const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
+
+
+
+
 //////////////////////////////////////////////
 // Connect MongoDB
 //////////////////////////////////////////////
@@ -122,8 +128,14 @@ const speedLimiter = slowDown({
   delayMs: 500 // begin adding 500ms of delay per request above 100:
 });
 
-
-
+// docs config
+try {
+    const docsSpec = yaml.safeLoad(fs.readFileSync('./docs-spec.yml', 'utf8'));
+    app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(docsSpec));
+    console.log(docsSpec);
+} catch (e) {
+    console.log(e);
+}
 
 //////////////////////////////////////////////
 // Get routes

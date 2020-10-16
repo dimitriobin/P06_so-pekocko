@@ -127,6 +127,13 @@ exports.deleteUser = (req, res, next) => {
         _id: req.params.id
     })
     .then(user => {
+        Sauce.find({userId: req.params.id})
+        .then(sauces => {
+            sauces.forEach(sauce => {
+                Sauce.updateOne(sauce, {userId:'000000000000000000000000000000'})
+                .then(updatedSauce => console.log(updatedSauce))
+                .catch(err => { res.status(500).send(err)})
+            })
             user.deleteOne({
                 _id: req.params.id
             })
@@ -140,6 +147,10 @@ exports.deleteUser = (req, res, next) => {
                 res.status(400).send(error);
             })
         })
+        .catch(err => {
+            res.status(404).send('Sauce non trouvée');
+        })
+    })
     .catch(error => {
         res.status(500).json({
             error
