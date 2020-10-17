@@ -2,7 +2,7 @@
 const Sauce = require('../models/Sauce');
 const fs = require('fs');
 
-exports.getAllSauces = (req, res, next) => {
+exports.readAllSauces = (req, res, next) => {
     Sauce.find()
     .then(sauces => {
         res.status(200).json(sauces);
@@ -13,7 +13,7 @@ exports.getAllSauces = (req, res, next) => {
 };
 
 
-exports.getOneSauce = (req, res, next) => {
+exports.readOneSauce = (req, res, next) => {
     Sauce.findOne({
         _id: req.params.id
     })

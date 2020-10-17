@@ -20,7 +20,7 @@ exports.signup = (req, res, next) => {
         user.save()
         .then(user => {
             res.status(201).json({
-                message: 'Utilisateur créé !'
+                message: 'User saved.'
             });
         })
         .catch(error => {
@@ -43,15 +43,15 @@ exports.login = (req, res, next) => {
     })
     .then(user => {
         if (!user) {
-            return res.status(401).json({
-                error: 'Utilisateur non trouvé'
+            return res.status(404).json({
+                error: 'User not found'
             });
         }
         bcrypt.compare(req.body.password, user.password)
         .then(validPass => {
             if (!validPass) {
                 return res.status(401).json({
-                    error: 'Mot de passe incorrect !'
+                    error: 'Wrong password.'
                 });
             }
             res.status(200).json({
@@ -78,18 +78,20 @@ exports.login = (req, res, next) => {
     })
 };
 
-exports.getUser = (req, res, next) => {
-    User.findOne({
-        _id: req.params.id
-    })
+exports.readUser = (req, res, next) => {
+    User.findById(req.params.id)
     .then(user => {
+        if(!user){
+            res.status(404).send('User not found');
+        }
         res.status(200).json(user);
     })
     .catch(error => {
-        res.status(400).send(error);
+        res.status(500).send(error);
     })
 };
 
+//Three case, if only email, if only password and if twice
 exports.updateUser = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(hashedPass => {
@@ -97,20 +99,60 @@ exports.updateUser = (req, res, next) => {
             email: req.body.email,
             password: hashedPass
         };
-        User.updateOne({
-            _id: req.params.id
-        }, {
+        User.updateOne({_id: req.params.id}, {
             ...user,
             _id: req.params.id
         })
         .then(user => {
             res.status(201).json({
-                message: 'Vos données sont modifiées !',
+                message: 'User updated.',
                 user
             });
         })
         .catch(error => {
-            res.status(400).json({
+            res.status(500).json({
+                error
+            });
+        })
+    })
+    .catch(error => {
+        res.status(400).json({
+            error
+        });
+    })
+};
+
+exports.deleteUser = (req, res, next) => {
+    User.findOne({
+        _id: req.params.id
+    })
+    .then(user => {
+        if(!user){
+            res.status(404).send('User not found');
+        }
+        Sauce.find({userId: req.params.id})
+        .then(sauces => {
+            sauces.forEach(sauce => {
+                Sauce.updateOne(sauce, {userId:'000000000000000000000000000000'})
+                .then(updatedSauce => console.log(updatedSauce))
+                .catch(err => { res.status(500).send(err)})
+            })
+            user.deleteOne({
+                _id: req.params.id
+            })
+            //remove deleted user
+            .then(deletedUser => {
+                res.status(200).json({
+                    message: 'User deleted.',
+                    deletedUser
+                });
+            })
+            .catch(error => {
+                res.status(500).send(error);
+            })
+        })
+        .catch(error => {
+            res.status(500).json({
                 error
             });
         })
@@ -122,42 +164,7 @@ exports.updateUser = (req, res, next) => {
     })
 };
 
-exports.deleteUser = (req, res, next) => {
-    User.findOne({
-        _id: req.params.id
-    })
-    .then(user => {
-        Sauce.find({userId: req.params.id})
-        .then(sauces => {
-            sauces.forEach(sauce => {
-                Sauce.updateOne(sauce, {userId:'000000000000000000000000000000'})
-                .then(updatedSauce => console.log(updatedSauce))
-                .catch(err => { res.status(500).send(err)})
-            })
-            user.deleteOne({
-                _id: req.params.id
-            })
-            .then(deletedUser => {
-                res.status(200).json({
-                    message: 'Cet user a été supprimée !',
-                    deletedUser
-                });
-            })
-            .catch(error => {
-                res.status(400).send(error);
-            })
-        })
-        .catch(err => {
-            res.status(404).send('Sauce non trouvée');
-        })
-    })
-    .catch(error => {
-        res.status(500).json({
-            error
-        });
-    })
-};
-
+//return .txt file with e-mail and list of sauces (full infos)
 exports.exportUser = (req, res, next) => {
     const dataFile = `./userDatas/${req.params.id}.json`
     User.findOne({_id: req.params.id})
@@ -197,7 +204,7 @@ exports.reportUser = (req, res, next) => {
     Report.findOne({itemId: req.body.itemId})
     .then(report => {
         if (report) {
-            res.send('Un rapport existe déjà')
+            res.send('A report already exist.')
         }
         const newReport = new Report({
             itemId: req.body.itemId,
@@ -206,13 +213,13 @@ exports.reportUser = (req, res, next) => {
         })
         newReport.save()
         .then(() => {
-            res.status(202).send('Un rapport a été créé, nous le traiterons dans les plus brefs délais');
+            res.status(202).send('A report was created, we will deal with it as soon as possible.');
         })
         .catch(err => {
             res.status(400).send(err)
         })
     })
     .catch(err => {
-        res.status(404).send('Ressource non trouvée')
+        res.status(404).send('Sauces not found.')
     })
 };

@@ -4,7 +4,7 @@ const router = require('express').Router();
 const {
     signup,
     login,
-    getUser,
+    readUser,
     updateUser,
     deleteUser,
     exportUser,
@@ -30,7 +30,7 @@ router.post('/login', registerValidation, login);
 // //////////////////////
 // GET user's informations ///////
 // //////////////////////
-router.get('/users/:id',auth, getUser);
+router.get('/users/:id',auth, readUser);
 
 // //////////////////////
 // UPDATE user's informations ///////

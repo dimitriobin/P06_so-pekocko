@@ -1,8 +1,8 @@
 'use strict'
 const router = require('express').Router();
 const {
-    getAllSauces,
-    getOneSauce,
+    readAllSauces,
+    readOneSauce,
     createOneSauce,
     updateOneSauce,
     deleteOneSauce,
@@ -17,13 +17,13 @@ const {sauceInputValidation} = require('../middleware/inputValidation');
 // //////////////////////
 // GET ALL Sauces ///////
 // //////////////////////
-router.get('/',auth, getAllSauces);
+router.get('/',auth, readAllSauces);
 
 
 // //////////////////////
 // GET ONE Sauce ///////
 // //////////////////////
-router.get('/:id',auth, getOneSauce);
+router.get('/:id',auth, readOneSauce);
 
 
 // //////////////////////
