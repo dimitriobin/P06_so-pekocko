@@ -124,7 +124,7 @@ const registerLimiter = rateLimit({
 //////////////////////////////////////////////
 const speedLimiter = slowDown({
   windowMs: 30 * 1000, // 30 sec
-  delayAfter: 5, // allow 10 requests per 30 seconds, then...
+  delayAfter: 10, // allow 10 requests per 30 seconds, then...
   delayMs: 500 // begin adding 500ms of delay per request above 100:
 });
 
