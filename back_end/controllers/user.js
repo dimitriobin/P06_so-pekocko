@@ -86,8 +86,8 @@ exports.updateUser = (req, res, next) => {
             email: req.body.email
         };
         User.updateOne({_id: req.params.id}, {...updatedEmail})
-        .then(res.status(200).send('User updated'))
-        .catch(err => res.status(400).send(err));
+        .then(res.status(200).json({'mesage': 'User updated'}))
+        .catch(err => res.status(400).json({error}));
     } else if (!req.body.email && req.body.password) {
         bcrypt.hash(req.body.password, 10)
         .then(hashedPAss => {
@@ -98,9 +98,9 @@ exports.updateUser = (req, res, next) => {
             }
             User.updateOne({_id: req.params.id}, {...updatedPassword})
             .then(res.status(200).send('User updated'))
-            .catch(err => res.status(400).send(err));
+            .catch(err => res.status(400).json({error}));
         })
-        .catch(err => res.status(500).send(err))
+        .catch(err => res.status(500).json({error}))
     } else {
         bcrypt.hash(req.body.password, 10)
         .then(hashedPAss => {
@@ -112,9 +112,9 @@ exports.updateUser = (req, res, next) => {
             }
             User.updateOne({_id: req.params.id}, {...updatedUser})
             .then(res.status(200).send('User updated'))
-            .catch(err => res.status(400).send(err));
+            .catch(err => res.status(400).json({error}));
         })
-        .catch(err => res.status(500).send(err))
+        .catch(err => res.status(500).json({error}))
     }
 };
 
@@ -128,7 +128,7 @@ exports.deleteUser = (req, res, next) => {
         .then(sauces => {
             sauces.forEach(sauce => {
                 Sauce.updateOne(sauce, {userId:'000000000000000000000000000000'})
-                .catch(err => { res.status(500).send(err)})
+                .catch(err => { res.status(500).json({error})})
             })
             user.deleteOne({_id: req.params.id})
             //remove deleted user
@@ -163,11 +163,11 @@ exports.exportUser = (req, res, next) => {
                     });
                 });
             })
-            .catch(err => res.status(404).send(err))
+            .catch(err => res.status(404).json({error}))
         })
-        .catch(err => res.status(404).send(err))
+        .catch(err => res.status(404).json({error}))
     })
-    .catch(err => res.status(404).send(err))
+    .catch(err => res.status(404).json({error}))
 };
 
 exports.reportUser = (req, res, next) => {
@@ -183,10 +183,10 @@ exports.reportUser = (req, res, next) => {
         })
         newReport.save()
         .then(() => {
-            res.status(202).send('A report was created, we will deal with it as soon as possible.');
+            res.status(202).json({message: 'A report has been created, we will deal with it as soon as possible.'});
         })
         .catch(err => {
-            res.status(400).send(err)
+            res.status(400).json({error})
         })
     })
     .catch(err => {

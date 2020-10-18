@@ -11,12 +11,12 @@ paths:
   /api/sauces:
     get:
       tags: [Sauces]
-      summary: Get all sauces
-      description: Return all sauces
+      summary: READ all sauces
+      description: Request an array of all sauces
       produces: application/json
       responses:
         '200':
-          description: Respond an array of all sauces objects in database
+          description: Return an array of all sauces objects in database
           content:
             application/json: 
               schema:
@@ -28,19 +28,19 @@ paths:
           content:
             application/json: 
               schema:
-                type: string
-                example: Requête invalide
+                type: object
+                example: {"error": {}}
         '401':
           description: Respond an unauthorized message
           content:
             application/json: 
               schema:
                 type: string
-                $ref: '#/components/schemas/errorUnauthorized'
+                example: Please login
     post:
       tags: [Sauces]
-      summary: Create one sauce
-      description: Create a sauce 
+      summary: CREATE one sauce
+      description: Post a new sauce 
       produces: application/json
       requestBody:
         required: true
@@ -58,27 +58,36 @@ paths:
             application/json: 
               schema:
                 type: object
-                example: {"message": "Vous avez ajouté une nouvelle sauce !"}
+                example: {"message": "Sauce saved"}
         '400':
           description: Respond with a Bad Request
           content:
             application/json: 
               schema:
-                type: string
-                example: Requête invalide
+                type: object
+                example: {"error": {}}
         '401':
-          description: Respond an unauthorized message
+          description: Respond with an unauthorized message
           content:
             application/json: 
               schema:
                 type: string
-                $ref: '#/components/schemas/errorUnauthorized'
+                example: Please login
   /api/sauces/:id:
     get:
       tags: [Sauces]
-      summary: Get one sauce
-      description: Return the sauce's object
+      summary: READ one sauce
+      description: request the sauce's object
       produces: application/json
+      parameters:
+      - name: id
+        in: path
+        description: the sauce's id
+        required: true
+        schema:
+          type: string
+          style: simple
+          example: localhost:3000/api/sauces/4ds5s6752s31ds5q67f5d
       responses:
         '200':
           description: Respond an object of all properties for this particular id
@@ -87,25 +96,34 @@ paths:
               schema:
                 type: object
                 $ref: '#/components/schemas/SauceResponse'
-        '400':
+        '404':
           description: Respond with a Bad Request
           content:
             application/json: 
               schema:
-                type: string
-                example: Requête invalide
+                type: object
+                example: {"error": {}}
         '401':
           description: Respond an unauthorized message
           content:
             application/json: 
               schema:
                 type: string
-                $ref: '#/components/schemas/errorUnauthorized'
+                example: Please login
     put:
       tags: [Sauces]
-      summary: Update one sauce
+      summary: UPDATE one sauce
       description: Replace the sauce's object with this new object
       produces: application/json
+      parameters:
+      - name: id
+        in: path
+        description: the sauce's id
+        required: true
+        schema:
+          type: string
+          style: simple
+          example: localhost:3000/api/sauces/4ds5s6752s31ds5q67f5d
       requestBody:
         required: true
         content:
@@ -122,55 +140,380 @@ paths:
             application/json: 
               schema:
                 type: object
-                example: Votre sauce a été modifiée !
+                example: {"message": "Sauce updated"}
         '400':
           description: Respond with a Bad Request
           content:
             application/json: 
               schema:
-                type: string
-                example: Requête invalide
+                type: object
+                example: {"error": {}}
         '401':
           description: Respond an unauthorized message
           content:
             application/json: 
               schema:
                 type: string
-                $ref: '#/components/schemas/errorUnauthorized'
+                example: Please login
     delete:
       tags: [Sauces]
-      summary: Delete one sauce
+      summary: DELETE one sauce
       description: Remove the sauce's object from the database
       produces: application/json
+      parameters:
+      - name: id
+        in: path
+        description: the sauce's id
+        required: true
+        schema:
+          type: string
+          style: simple
+          example: localhost:3000/api/sauces/4ds5s6752s31ds5q67f5d
       responses:
         '200':
           description: Respond a success message
           content:
             application/json:
               schema:
-                type: string
-                example: Cette sauce a été supprimée !
+                type: object
+                example: {"message": "Sauce deleted"}
         '400':
           description: Respond with a Bad Request
           content:
             application/json: 
               schema:
-                type: string
-                example: Requête invalide
+                type: object
+                example: {"error": {}}
         '401':
           description: Respond an unauthorized message
           content:
             application/json: 
               schema:
                 type: string
-                $ref: '#/components/schemas/errorUnauthorized'
-        '500':
-          description: Respond an internal error
+                example: Please login
+  /api/auth/signup:
+    post:
+      tags: [users]
+      summary: CREATE one user
+      description: Signup a new user 
+      produces: application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-url-encoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Respond with a created ressource
           content:
             application/json: 
               schema:
                 type: object
-                example: {"error": "error"}
+                example: {"message": "User saved"}
+        '400':
+          description: Respond with a Bad Request
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": {}}
+        '401':
+          description: Respond with an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Please login
+        '500':
+          description: Respond with an internal servor message
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": {}}
+  /api/auth/login:
+    post:
+      tags: [users]
+      summary: LOGIN one user
+      description: Login a user 
+      produces: application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-url-encoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Return the session's infos 
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"userId": "45fd6sf45ds64f5d6s", "token": "f4ds56fd45s6456dsf654fds654dsf654fds645dfs465dfs546fds465dfs654dsf654"}
+        '404':
+          description: Respond with a Bad Request
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": "User not found"}
+        '401':
+          description: Respond with an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": "Wrong password"}
+        '500':
+          description: Respond with an internal servor message
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": {}}
+  /api/auth/users/:id:
+    get:
+      tags: [users]
+      summary: READ one user
+      description: Read a user 
+      produces: application/json
+      parameters:
+      - name: id
+        in: path
+        description: the userId
+        required: true
+        schema:
+          type: string
+          style: simple
+          example: localhost:3000/api/auth/users/4ds5s6752s31ds5q67f5d
+      responses:
+        '200':
+          description: Return an object of all infos for this user 
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"email": "user@gmail.com", "password": "sdf4654fds55f6d4s5d6fsf4d564fd6s54d6f"}
+        '404':
+          description: Respond with a Bad Request
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": "User not found"}
+        '401':
+          description: Respond with an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Please login
+        '500':
+          description: Respond with an internal servor message
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": {}}
+    put:
+      tags: [users]
+      summary: UPDATE one user
+      description: Update informations for a user 
+      produces: application/json
+      parameters:
+      - name: id
+        in: path
+        description: the userId
+        required: true
+        schema:
+          type: string
+          style: simple
+          example: localhost:3000/api/auth/users/4ds5s6752s31ds5q67f5d
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-url-encoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Return the session's infos 
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"message": "User updated"}
+        '400':
+          description: Respond with a Bad Request
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": {}}
+        '401':
+          description: Respond with an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Please login
+        '500':
+          description: Respond with an internal servor message
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": {}}
+    delete:
+      tags: [users]
+      summary: DELETE one user
+      description: Remove a user  
+      produces: application/json
+      parameters:
+      - name: id
+        in: path
+        description: the userId
+        required: true
+        schema:
+          type: string
+          style: simple
+          example: localhost:3000/api/auth/users/4ds5s6752s31ds5q67f5d
+      responses:
+        '200':
+          description: Return the session's infos 
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"message": "User deleted"}
+        '404':
+          description: Respond with a Bad Request
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": "User not found"}
+        '401':
+          description: Respond with an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Please login
+        '500':
+          description: Respond with an internal servor message
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": {}}
+  /api/auth/users/:id/exports:
+    get:
+      tags: [users]
+      summary: EXPORT one user
+      description: Create a file with all the infos and send it in a download method  
+      produces: application/json
+      parameters:
+      - name: id
+        in: path
+        description: the userId
+        required: true
+        schema:
+          type: string
+          style: simple
+          example: localhost:3000/api/auth/users/4ds5s6752s31ds5q67f5d/exports
+      responses:
+        '201':
+          description: Respond with a created ressource message 
+          content:
+            text/plain: 
+              schema:
+                type: file
+        '404':
+          description: Respond with a not found message
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": "User not found"}
+        '401':
+          description: Respond with an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Please login
+        '500':
+          description: Respond with an internal servor message
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": {}}
+  /api/auth/users/reports:
+    post:
+      tags: [users]
+      summary: Report a sauce
+      description: Post a report with a status of 'pending'  
+      produces: application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemId:
+                  type: string
+                type:
+                  type: string
+                status:
+                  type: string
+              example: {"itemId": "4fds54fd5s64fd65s", "type": "Violent content", "status": "pending"}
+          application/x-www-url-encoded:
+            schema:
+              type: object
+              properties:
+                itemId:
+                  type: string
+                type:
+                  type: string
+                status:
+                  type: string
+              example: {"itemId": "4fds54fd5s64fd65s", "type": "Violent content", "status": "pending"}
+      responses:
+        '202':
+          description: Respond with an accepted ressource message 
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"message": "A report has been created, we will deal with it as soon as possible."}
+        '404':
+          description: Respond with a not found message
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": "Sauce not found"}
+        '401':
+          description: Respond with an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Please login
 components:
   schemas:
     SauceRequest:
@@ -263,6 +606,16 @@ components:
         usersLiked: ["5f82edcc93475b24f0f30fd2", "5f82f7122daab413945e9ea3", "5f831be2d9378833ac04c4b4"]
         usersDisliked: []
         __v: 0
-    errorUnauthorized:
-      type: string
-      example: Veuillez vous connecter à l'application
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required: 
+        - email
+        - password
+      example:
+        email: user@mail.com
+        password: 123Password!
