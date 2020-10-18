@@ -170,3 +170,16 @@
 ::1 - - [16/Oct/2020:20:44:56 +0000] "GET /api/docs/ HTTP/1.1" 404 148
 ::1 - - [16/Oct/2020:20:44:59 +0000] "GET /api/docs/ HTTP/1.1" 404 148
 ::1 - - [17/Oct/2020:07:29:48 +0000] "POST /api/auth/login HTTP/1.1" 401 35
+::1 - - [18/Oct/2020:13:18:15 +0000] "POST /api/auth/login HTTP/1.1" 404 26
+::1 - - [18/Oct/2020:13:18:31 +0000] "POST /api/auth/signup HTTP/1.1" 400 472
+::1 - - [18/Oct/2020:13:18:57 +0000] "POST /api/auth/login HTTP/1.1" 401 27
+::1 - - [18/Oct/2020:13:19:10 +0000] "POST /api/auth/login HTTP/1.1" 401 27
+::1 - - [18/Oct/2020:13:58:41 +0000] "POST /api/auth/users/5f86c48bbd62804244545e68/exports HTTP/1.1" 404 187
+::1 - - [18/Oct/2020:14:00:51 +0000] "POST /api/auth/users/5f8c40d90da6354368525f2a/exports HTTP/1.1" 404 187
+::1 - - [18/Oct/2020:14:01:08 +0000] "GET /api/auth/users/5f8c40d90da6354368525f2a/exports HTTP/1.1" 401 40
+::1 - - [18/Oct/2020:14:20:19 +0000] "GET /api/auth/users/5f8c40d90da6354368525f2a/exports HTTP/1.1" 404 2
+::1 - - [18/Oct/2020:14:20:19 +0000] "GET /favicon.ico HTTP/1.1" 404 150
+::1 - - [18/Oct/2020:14:20:22 +0000] "GET /api/auth/users/5f8c40d90da6354368525f2a/exports HTTP/1.1" 404 2
+::1 - - [18/Oct/2020:14:20:28 +0000] "GET /api/auth/users/5f8c40d90da6354368525f2a/exports HTTP/1.1" 404 2
+::1 - - [18/Oct/2020:14:21:40 +0000] "GET /api/auth/users/5f8c40d90da6354368525f2a/exports HTTP/1.1" 401 40
+::1 - - [18/Oct/2020:14:22:24 +0000] "GET /api/auth/users/5f8c40d90da6354368525f2a/exports HTTP/1.1" 401 12

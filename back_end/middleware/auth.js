@@ -15,6 +15,6 @@ module.exports = (req, res, next) => {
         // res.status(401).json({
         //     error: new Error('Invalid request!')
         // });
-        res.status(401).send('Veuillez vous connecter à l\'application')
+        res.status(401).send('Please login')
     }
 };

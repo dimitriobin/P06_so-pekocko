@@ -93,39 +93,47 @@ exports.readUser = (req, res, next) => {
 
 //Three case, if only email, if only password and if twice
 exports.updateUser = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
-    .then(hashedPass => {
-        const user = {
-            email: req.body.email,
-            password: hashedPass
+    if (req.body.email && !req.body.password) {
+        const updatedEmail = {
+            ...req.body.user,
+            _id: req.params.id,
+            email: req.body.email
         };
-        User.updateOne({_id: req.params.id}, {
-            ...user,
-            _id: req.params.id
+        User.updateOne({_id: req.params.id}, {...updatedEmail})
+        .then(res.status(200).send('User updated'))
+        .catch(err => res.status(400).send(err));
+    } else if (!req.body.email && req.body.password) {
+        bcrypt.hash(req.body.password, 10)
+        .then(hashedPAss => {
+            const updatedPassword = {
+                ...req.body.user,
+                _id: req.params.id,
+                password: hashedPAss
+            }
+            User.updateOne({_id: req.params.id}, {...updatedPassword})
+            .then(res.status(200).send('User updated'))
+            .catch(err => res.status(400).send(err));
         })
-        .then(user => {
-            res.status(201).json({
-                message: 'User updated.',
-                user
-            });
+        .catch(err => res.status(500).send(err))
+    } else {
+        bcrypt.hash(req.body.password, 10)
+        .then(hashedPAss => {
+            const updatedUser = {
+                ...req.body.user,
+                _id: req.params.id,
+                email: req.body.email,
+                password: hashedPAss
+            }
+            User.updateOne({_id: req.params.id}, {...updatedUser})
+            .then(res.status(200).send('User updated'))
+            .catch(err => res.status(400).send(err));
         })
-        .catch(error => {
-            res.status(500).json({
-                error
-            });
-        })
-    })
-    .catch(error => {
-        res.status(400).json({
-            error
-        });
-    })
+        .catch(err => res.status(500).send(err))
+    }
 };
 
 exports.deleteUser = (req, res, next) => {
-    User.findOne({
-        _id: req.params.id
-    })
+    User.findById(req.params.id)
     .then(user => {
         if(!user){
             res.status(404).send('User not found');
@@ -134,70 +142,46 @@ exports.deleteUser = (req, res, next) => {
         .then(sauces => {
             sauces.forEach(sauce => {
                 Sauce.updateOne(sauce, {userId:'000000000000000000000000000000'})
-                .then(updatedSauce => console.log(updatedSauce))
                 .catch(err => { res.status(500).send(err)})
             })
-            user.deleteOne({
-                _id: req.params.id
-            })
+            user.deleteOne({_id: req.params.id})
             //remove deleted user
-            .then(deletedUser => {
-                res.status(200).json({
-                    message: 'User deleted.',
-                    deletedUser
-                });
-            })
-            .catch(error => {
-                res.status(500).send(error);
-            })
+            .then( res.status(200).json({ message: 'User deleted.' }))
+            .catch(error => res.status(500).send(error))
         })
-        .catch(error => {
-            res.status(500).json({
-                error
-            });
-        })
+        .catch(error => res.status(500).json({ error }))
     })
-    .catch(error => {
-        res.status(500).json({
-            error
-        });
-    })
+    .catch(error => res.status(500).json({ error }))
 };
 
 //return .txt file with e-mail and list of sauces (full infos)
 exports.exportUser = (req, res, next) => {
-    const dataFile = `./userDatas/${req.params.id}.json`
-    User.findOne({_id: req.params.id})
+    const dataFile = `./userDatas/${req.params.id}.txt`
+    User.findById(req.params.id)
     .then(user => {
         Sauce.find({userId: req.params.id})
         .then(sauces => {
-            if (sauces.length === 0) {
-                res.send('You have no sauce in our database !')
-            }
-            fsPromises.writeFile(dataFile, sauces)
+            const userDatas = []
+            userDatas.push(user);
+            sauces.length === 0 ? user.datas = 'You don\'t have any sauce write in our DB' : userDatas.push(sauces)
+            fsPromises.writeFile(dataFile, userDatas)
             .then(() => {
-                res.status(201).download(dataFile, 'vos_données_personnelles.json', err => {
+                res.status(201).download(dataFile, 'vos_données_personnelles.txt', err => {
                     if (err) {
-                        res.send(err);
+                         res.status(500).json(err); 
                     }
                     fs.unlink(dataFile, err => {
                         if (err) {
-                            res.send(err);
+                            res.status(500).json(err); 
                         }
                     });
                 });
             })
-            .catch(err => {
-                res.status(404).send(err);
-            })
+            .catch(err => res.status(404).send(err))
         })
-        .catch(err => {
-            res.status(404).send(err);
-        })
+        .catch(err => res.status(404).send(err))
     })
-    .catch(err => {
-        res.status(404).send(err);
-    })
+    .catch(err => res.status(404).send(err))
 };
 
 exports.reportUser = (req, res, next) => {
