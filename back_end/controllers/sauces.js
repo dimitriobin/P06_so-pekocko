@@ -47,7 +47,6 @@ exports.updateOneSauce = (req, res, next) => {
             ...req.body
         };
         if (req.file) {
-            console.log('req.file');
             Sauce.findById(req.params.id)
             .then(sauce => {
                 const filename = sauce.imageUrl.split('/images/')[1];
@@ -58,7 +57,6 @@ exports.updateOneSauce = (req, res, next) => {
                 });
             })
             .catch(error => {
-                console.log(error);
                 res.status(404).json({error})})
         }
         Sauce.findByIdAndUpdate(req.params.id, {
@@ -66,7 +64,6 @@ exports.updateOneSauce = (req, res, next) => {
             _id: req.params.id
         })
         .then(sauce => {
-            console.log(sauce);
             res.status(200).json({message: 'Sauce updated'})})
         .catch(error => res.status(404).send({error, message: 'Sauce not found'}))
 };
