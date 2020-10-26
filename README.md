@@ -18,3 +18,8 @@ You will need to have Node and `npm` installed locally on your machine.
 5. Once the back end server is running, go in the front end folder 
     and then run the npm scrypt `npm run start`.
     The server should run on `localhost` with default port `4200`
+
+
+
+### Vulnerabilities are checked with deep scan ###
+    [![DeepScan grade](https://deepscan.io/api/teams/11502/projects/14404/branches/267003/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=11502&pid=14404&bid=267003)
