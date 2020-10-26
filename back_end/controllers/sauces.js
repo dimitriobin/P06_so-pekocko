@@ -16,15 +16,26 @@ exports.createOneSauce = (req, res, next) => {
 
 exports.readAllSauces = (req, res, next) => {
     Sauce.find()
-    .then(sauces => res.status(200).json(sauces))
-    .catch(error => res.status(400).json({error}))
+    .then(sauces => {
+        if(sauces.length <= 0) {
+            return res.status(404).json({
+                error: 'No sauces to display'
+            });
+        } else {
+            res.status(200).json(sauces)}
+        })
+    .catch(error => res.status(500).json({error}))
 };
 
 
 exports.readOneSauce = (req, res, next) => {
     Sauce.findById(req.params.id)
-    .then(sauce => res.status(200).json(sauce))
-    .catch(error => res.status(404).json({error}))
+    .then(sauce => {
+        if(!sauce) {
+            return res.status(404).send('Sauce not found')
+        }
+        res.status(200).json(sauce)})
+    .catch(error => res.status(404).json({error: error, message: 'Sauce not found'}))
 };
 
 
@@ -36,6 +47,7 @@ exports.updateOneSauce = (req, res, next) => {
             ...req.body
         };
         if (req.file) {
+            console.log('req.file');
             Sauce.findById(req.params.id)
             .then(sauce => {
                 const filename = sauce.imageUrl.split('/images/')[1];
@@ -45,16 +57,18 @@ exports.updateOneSauce = (req, res, next) => {
                     }
                 });
             })
-            .catch(error => res.status(404).json({error}))
+            .catch(error => {
+                console.log(error);
+                res.status(404).json({error})})
         }
-        Sauce.updateOne({
-            _id: req.params.id
-        }, {
+        Sauce.findByIdAndUpdate(req.params.id, {
             ...sauceObject,
             _id: req.params.id
         })
-        .then(res.status(200).json({message: 'Sauce updated'}))
-        .catch(error => res.status(400).send({error}))
+        .then(sauce => {
+            console.log(sauce);
+            res.status(200).json({message: 'Sauce updated'})})
+        .catch(error => res.status(404).send({error, message: 'Sauce not found'}))
 };
 
 exports.deleteOneSauce = (req, res, next) => {
@@ -71,12 +85,12 @@ exports.deleteOneSauce = (req, res, next) => {
                 });
             })
             .catch(error => {
-                res.status(400).json({error});
+                res.status(500).json({error});
             })
         });
     })
     .catch(error => {
-        res.status(404).json({error});
+        res.status(404).json({error, message: 'Sauce not found'});
     })
 };
 
@@ -141,6 +155,9 @@ exports.likeOneSauce = (req, res, next) => {
             res.status(200).json({
                 message: 'The sauce has been updated'
             });
+        })
+        .catch(err => {
+            res.status(500).json({ error });
         })
     })
     .catch(error => res.status(404).json({error}))
