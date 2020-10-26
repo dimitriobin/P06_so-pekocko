@@ -19,6 +19,9 @@ You will need to have Node and `npm` installed locally on your machine.
     and then run the npm scrypt `npm run start`.
     The server should run on `localhost` with default port `4200`
 
+### Documentations ###
+You can find the API's documentation at the following : 
+`localhost:3000/api/docs`
 
 
 ### Vulnerabilities are checked with deep scan ###

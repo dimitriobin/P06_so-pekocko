@@ -23,15 +23,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SauceResponse'
-        '400':
-          description: Respond with a Bad Request
+        '401':
+          description: Respond with an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Please login
+        '404':
+          description: Not found
           content:
             application/json: 
               schema:
                 type: object
-                example: {"error": {}}
-        '401':
-          description: Respond an unauthorized message
+                example: {error, message: 'Sauce not found'}
+        '500':
+          description: Internal error
           content:
             application/json: 
               schema:
@@ -60,14 +67,14 @@ paths:
                 type: object
                 example: {"message": "Sauce saved"}
         '400':
-          description: Respond with a Bad Request
+          description: Bad Request
           content:
             application/json: 
               schema:
                 type: object
                 example: {"error": {}}
         '401':
-          description: Respond with an unauthorized message
+          description: Unauthorized message
           content:
             application/json: 
               schema:
@@ -97,12 +104,12 @@ paths:
                 type: object
                 $ref: '#/components/schemas/SauceResponse'
         '404':
-          description: Respond with a Bad Request
+          description: Not found
           content:
             application/json: 
               schema:
                 type: object
-                example: {"error": {}}
+                example: {error, message: 'Sauce not found'}
         '401':
           description: Respond an unauthorized message
           content:
@@ -141,13 +148,13 @@ paths:
               schema:
                 type: object
                 example: {"message": "Sauce updated"}
-        '400':
-          description: Respond with a Bad Request
+        '404':
+          description: Not found
           content:
             application/json: 
               schema:
                 type: object
-                example: {"error": {}}
+                example: {error, message: 'Sauce not found'}
         '401':
           description: Respond an unauthorized message
           content:
@@ -177,13 +184,13 @@ paths:
               schema:
                 type: object
                 example: {"message": "Sauce deleted"}
-        '400':
-          description: Respond with a Bad Request
+        '404':
+          description: Not found
           content:
             application/json: 
               schema:
                 type: object
-                example: {"error": {}}
+                example: {error, message: 'Sauce not found'}
         '401':
           description: Respond an unauthorized message
           content:
@@ -191,6 +198,70 @@ paths:
               schema:
                 type: string
                 example: Please login
+        '500':
+          description: Respond with an internal servor message
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": {}}
+  /api/sauces/:id/like:
+    post:
+      tags: [Sauces]
+      summary: Like one sauce
+      description: Like or dislike a sauce
+      produces: application/json
+      parameters:
+      - name: id
+        in: path
+        description: the sauce's id
+        required: true
+        schema:
+          type: string
+          style: simple
+          example: localhost:3000/api/sauces/4ds5s6752s31ds5q67f5d
+      requestBody:
+        required: true
+        description: The number must be either -1, 0 or 1. -1 = dislike; 0 = nothing; 1 = like
+        content:
+          application/json:
+            schema:
+              type: object
+              example: { userId: 'string', like: 'number'}
+          application/x-www-url-encoded:
+            schema:
+              type: object
+              example: { userId: 'string', like: 'number'}
+      responses:
+        '200':
+          description: Respond a success message
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {"message": "Sauce deleted"}
+        '404':
+          description: Not found
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {error, message: 'Sauce not found'}
+        '401':
+          description: Respond an unauthorized message
+          content:
+            application/json: 
+              schema:
+                type: string
+                example: Please login
+        '500':
+          description: Respond with an internal servor message
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": {}}
+
   /api/auth/signup:
     post:
       tags: [users]
@@ -316,13 +387,6 @@ paths:
               schema:
                 type: string
                 example: Please login
-        '500':
-          description: Respond with an internal servor message
-          content:
-            application/json: 
-              schema:
-                type: object
-                example: {"error": {}}
     put:
       tags: [users]
       summary: UPDATE one user
@@ -500,6 +564,13 @@ paths:
               schema:
                 type: object
                 example: {"message": "A report has been created, we will deal with it as soon as possible."}
+        '400':
+          description: Respond with a Bad Request
+          content:
+            application/json: 
+              schema:
+                type: object
+                example: {"error": {}}
         '404':
           description: Respond with a not found message
           content:
