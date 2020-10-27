@@ -29,3 +29,4 @@ You can find the API's documentation at the following :
 ### Vulnerabilities are checked with deep scan ###
 [![DeepScan grade](https://deepscan.io/api/teams/11502/projects/14404/branches/267003/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=11502&pid=14404&bid=267003)
 [![Known Vulnerabilities](https://snyk.io/test/github/dimitriobin/P06_so-pekocko/badge.svg)](https://snyk.io/test/github/dimitriobin/P06_so-pekocko)
+[![Known Vulnerabilities](https://snyk.io/test/github/dimitriobin/P06_so-pekocko//badge.svg)](https://snyk.io/test/github/dimitriobin/P06_so-pekocko/)
