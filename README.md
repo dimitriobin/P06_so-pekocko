@@ -11,13 +11,14 @@ You will need to have Node and `npm` installed locally on your machine.
 
 2. Move into the back_end folder with `cd back_end/`
 3. Run `npm install`. That will install the back end API on your local system.
-4. Run the server with `npm run start`. The server should run on `localhost` with default port `3000`. If the
+4. Copy .env.example to .env and set you environment
+5. Run the server with `npm run start`. The server should run on `localhost` with default port `3000`. If the
     server runs on another port for any reason, this is printed to the
     console when the server starts, e.g. `Listening on port 3001`.
 
-5. Then move into the front_end folder with `cd front_end/`
-6. Run `npm install`. That will install the front end application on your local system. 
-7. Run the npm scrypt `npm run start`.
+6. Then move into the front_end folder with `cd front_end/`
+7. Run `npm install`. That will install the front end application on your local system. 
+8. Run the npm scrypt `npm run start`.
     The server should run on `localhost` with default port `4200`
 
 ### Documentations ###
