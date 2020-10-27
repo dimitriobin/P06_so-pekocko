@@ -31,9 +31,6 @@ exports.readAllSauces = (req, res, next) => {
 exports.readOneSauce = (req, res, next) => {
     Sauce.findById(req.params.id)
     .then(sauce => {
-        if(!sauce) {
-            return res.status(404).send('Sauce not found')
-        }
         res.status(200).json(sauce)})
     .catch(error => res.status(404).json({error: error, message: 'Sauce not found'}))
 };

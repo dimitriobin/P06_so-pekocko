@@ -67,9 +67,6 @@ exports.login = (req, res, next) => {
 exports.readUser = (req, res, next) => {
     User.findById(req.params.id)
     .then(user => {
-        if(!user){
-            return res.status(404).send('User not found');
-        }
         res.status(200).json(user);
     })
     .catch(error => {
@@ -121,9 +118,6 @@ exports.updateUser = (req, res, next) => {
 exports.deleteUser = (req, res, next) => {
     User.findById(req.params.id)
     .then(user => {
-        if(!user){
-            return res.status(404).send('User not found');
-        }
         Sauce.find({userId: req.params.id})
         .then(sauces => {
             sauces.forEach(sauce => {
@@ -145,9 +139,6 @@ exports.exportUser = (req, res, next) => {
     const dataFile = `./userDatas/${req.params.id}.txt`
     User.findById(req.params.id)
     .then(user => {
-        if(!user) {
-            return res.status(404).json({message: 'User not found'})
-        }
         Sauce.find({userId: req.params.id})
         .then(sauces => {
             const userDatas = []
