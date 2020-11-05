@@ -35,7 +35,7 @@ exports.sauceInputValidation = (req, res, next) => {
     } : {
         ...req.body
     };
-    const { error, value } = schema.validate(sauceObject);
+    const { error } = schema.validate(sauceObject);
     if (error) { 
         res.status(400).send(error.details[0].message);
     } else {
