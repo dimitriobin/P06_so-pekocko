@@ -1,11 +1,55 @@
+'use strict'
 const router = require('express').Router();
 
 const {
     signup,
-    login
+    login,
+    readUser,
+    updateUser,
+    deleteUser,
+    exportUser,
+    reportUser
 } = require('../controllers/user');
 
-router.post('/signup', signup);
-router.post('/login', login);
+const {
+    registerValidation
+} = require('../middleware/inputValidation');
+
+const auth = require('../middleware/auth');
+
+// //////////////////////
+// Create one user ///////
+// //////////////////////
+router.post('/signup', registerValidation, signup);
+
+// //////////////////////
+// Login user ///////
+// //////////////////////
+router.post('/login', registerValidation, login);
+
+// //////////////////////
+// GET user's informations ///////
+// //////////////////////
+router.get('/users/:id',auth, readUser);
+
+// //////////////////////
+// UPDATE user's informations ///////
+// //////////////////////
+router.put('/users/:id',auth, updateUser);
+
+// //////////////////////
+// DELETE user ///////
+// //////////////////////
+router.delete('/users/:id',auth, deleteUser);
+
+// //////////////////////
+// Export user's informations ///////
+// //////////////////////
+router.get('/users/:id/exports',auth, exportUser);
+
+// //////////////////////
+// CREATE report ///////
+// //////////////////////
+router.post('/users/reports',auth, reportUser);
 
 module.exports = router;

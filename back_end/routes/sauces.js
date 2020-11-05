@@ -1,7 +1,8 @@
+'use strict'
 const router = require('express').Router();
 const {
-    getAllSauces,
-    getOneSauce,
+    readAllSauces,
+    readOneSauce,
     createOneSauce,
     updateOneSauce,
     deleteOneSauce,
@@ -9,40 +10,43 @@ const {
 } = require('../controllers/sauces');
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
+const {sauceInputValidation} = require('../middleware/inputValidation');
+
+
 
 // //////////////////////
 // GET ALL Sauces ///////
 // //////////////////////
-router.get('/', auth, getAllSauces);
+router.get('/',auth, readAllSauces);
 
 
 // //////////////////////
 // GET ONE Sauce ///////
 // //////////////////////
-router.get('/:id', auth, getOneSauce);
+router.get('/:id',auth, readOneSauce);
 
 
 // //////////////////////
 // CREATE ONE Sauce ///////
 // //////////////////////
-router.post('/', auth, multer, createOneSauce);
+router.post('/',auth, multer, sauceInputValidation, createOneSauce);
 
 
 // //////////////////////
 // UPDATE ONE Sauce ///////
 // //////////////////////
-router.put('/:id', auth, multer, updateOneSauce);
+router.put('/:id',auth, multer, sauceInputValidation, updateOneSauce);
 
 
 // //////////////////////
 // DELETE ONE Sauce ///////
 // //////////////////////
-router.delete('/:id', auth, deleteOneSauce);
+router.delete('/:id',auth, deleteOneSauce);
 
 // //////////////////////
 // LIKE ONE Sauce ///////
 // //////////////////////
-router.post('/:id/like', auth, likeOneSauce);
+router.post('/:id/like',auth, likeOneSauce);
 
 
 
