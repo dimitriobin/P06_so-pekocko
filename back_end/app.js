@@ -132,7 +132,6 @@ const speedLimiter = slowDown({
 try {
     const docsSpec = yaml.safeLoad(fs.readFileSync('./docs-spec.yml', 'utf8'));
     app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(docsSpec));
-    console.log(docsSpec);
 } catch (e) {
     console.log(e);
 }
