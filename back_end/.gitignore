@@ -1,5 +1,6 @@
 /node_modules
 /images
 .env
-/activity
+/activity/access.log
+/activity/errors.log
 /cert
