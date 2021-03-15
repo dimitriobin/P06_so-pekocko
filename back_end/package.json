@@ -21,7 +21,7 @@
     "joi": "^17.3.0",
     "js-yaml": "^3.14.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.11.7",
+    "mongoose": "^5.11.17",
     "mongoose-unique-validator": "^2.0.3",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
