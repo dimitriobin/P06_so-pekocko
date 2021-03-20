@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap");
+}
+
+@layer utilities {
+  .sauce-card:hover > img {
+    transform: scale(1.1);
+  }
+
+  .sauce-card > img {
+    transform: scale(1);
+    transition: all ease-in-out 0.4s;
+  }
+
+  .sauce-card:hover div img {
+    right: 1rem;
+    transform: translate(0, -50%);
+  }
+
+  .sauce-card div img {
+    right: 50%;
+    top: 0;
+    transform: translate(50%, -50%);
+    transition: all ease-in-out 0.4s;
+  }
+
+  .sauce-card:hover div {
+    height: 35%;
+  }
+
+  /* .sauce-card:hover div p,
+  .sauce-card:hover div h2 {
+    color: transparent;
+  } */
+
+  .sauce-card div,
+  .sauce-card:hover div p,
+  .sauce-card:hover div h2 {
+    transition: all ease-in-out 0.4s;
+  }
+}
