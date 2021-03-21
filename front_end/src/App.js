@@ -22,6 +22,13 @@ function App() {
     }
   }, []);
 
+  const handeLogout = (e) => {
+    e.preventDefault();
+
+    AuthService.logout();
+    window.location.reload();
+  };
+
   return (
     <div className="App min-h-screen flex flex-col justify-between items-center relative">
       <nav className="container relative flex items-center justify-center mb-10 lg:mb-20">
@@ -33,7 +40,10 @@ function App() {
           ></img>
         </Link>
         {currentUser ? (
-          <button className="absolute top-5 md:top-10 lg:top-20 right-5 md:right-10 lg:right-20">
+          <button
+            onClick={handeLogout}
+            className="absolute top-5 md:top-10 lg:top-20 right-5 md:right-10 lg:right-20"
+          >
             <i className="fas fa-sign-out-alt fa-3x"></i>
           </button>
         ) : (
