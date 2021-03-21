@@ -101,7 +101,7 @@ const Login = (props) => {
         </div>
 
         <button className="bg-green-500 hover:bg-green-900 focus:bg-green-900 active:bg-green-900 rounded-full p-3 w-5/12 uppercase font-bold text-white text-xl focus:outline-none transition-all">
-          {loading && <i class="fas fa-spinner animate-spin"></i>}
+          {loading && <i className="fas fa-spinner animate-spin"></i>}
           Log in
         </button>
 
