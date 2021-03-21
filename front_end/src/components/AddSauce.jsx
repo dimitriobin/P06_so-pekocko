@@ -1,10 +1,7 @@
 function AddSauce({ active }) {
   const image_url = false;
   return (
-    <div
-      className={active ? "block" : "hidden"}
-      className="popup__bg bg-black bg-opacity-80 absolute top-0 right-0 left-0 bottom-0"
-    >
+    <div className="popup__bg bg-black bg-opacity-80 absolute top-0 right-0 left-0 bottom-0">
       <form className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-5 md:p-8 lg:p-10 w-11/12 md:w-8/12 lg:w-6/12 xl:w-5/12 2xl:w-4/12 rounded-3xl flex flex-col">
         <label htmlFor="name" className="font-medium mb-1">
           Sauce's name
