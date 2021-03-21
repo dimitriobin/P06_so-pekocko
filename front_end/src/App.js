@@ -5,13 +5,11 @@ import "./App.css";
 
 import SauceList from "./components/SaucesList";
 import Sauce from "./components/Sauce";
-import AddSauce from "./components/AddSauce";
 import Login from "./components/Login";
 import Signup from "./components/Register";
 import AuthService from "./services/AuthServices";
 
 function App() {
-  const addSauce = false;
   const [currentUser, setCurrentUser] = useState(undefined);
 
   useEffect(() => {
@@ -64,12 +62,11 @@ function App() {
               <Route path={"/sauce/:id"} component={Sauce} />
             </div>
           </Switch>
-          {addSauce && <AddSauce />}
         </>
       ) : (
         <Switch>
           <div className="container mx-auto">
-            <Route exact path={["/", "/login"]} component={Login} />
+            <Route exact path={"/login"} component={Login} />
             <Route path={"/signup"} component={Signup} />
           </div>
         </Switch>

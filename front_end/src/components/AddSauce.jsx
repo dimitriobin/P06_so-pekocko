@@ -1,7 +1,14 @@
-function AddSauce() {
+function AddSauce({ showSauceForm }) {
   const image_url = false;
+
+  const handleCloseSauceForm = (e) => {
+    e.preventDefault();
+
+    showSauceForm(false);
+  };
+
   return (
-    <div className="popup__bg bg-black bg-opacity-80 absolute top-0 right-0 left-0 bottom-0">
+    <div className="popup__bg bg-black bg-opacity-80 absolute top-0 right-0 left-0 bottom-0 z-10">
       <form className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-5 md:p-8 lg:p-10 w-11/12 md:w-8/12 lg:w-6/12 xl:w-5/12 2xl:w-4/12 rounded-3xl flex flex-col">
         <label htmlFor="name" className="font-medium mb-1">
           Sauce's name
@@ -85,7 +92,10 @@ function AddSauce() {
           >
             Add
           </button>
-          <button className="bg-red-500 hover:bg-red-900 focus:bg-red-900 active:bg-red-900 rounded-full p-3 w-5/12 uppercase font-bold text-white text-xl focus:outline-none transition-all">
+          <button
+            onClick={handleCloseSauceForm}
+            className="bg-red-500 hover:bg-red-900 focus:bg-red-900 active:bg-red-900 rounded-full p-3 w-5/12 uppercase font-bold text-white text-xl focus:outline-none transition-all"
+          >
             Back
           </button>
         </div>
