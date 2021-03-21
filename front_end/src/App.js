@@ -7,8 +7,8 @@ import Sauce from "./components/Sauce";
 
 function App() {
   return (
-    <div className="App">
-      <nav className="w-full flex items-center justify-center mb-20">
+    <div className="App min-h-screen flex flex-col justify-between items-center">
+      <nav className="w-full flex items-center justify-center mb-10 lg:mb-20">
         <Link to={"/sauces"}>
           <img
             src={logo}
