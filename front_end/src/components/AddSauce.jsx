@@ -1,4 +1,4 @@
-function AddSauce({ active }) {
+function AddSauce() {
   const image_url = false;
   return (
     <div className="popup__bg bg-black bg-opacity-80 absolute top-0 right-0 left-0 bottom-0">
