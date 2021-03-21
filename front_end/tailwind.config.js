@@ -12,7 +12,11 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ["active"],
+      borderWidth: ["hover"],
+      display: ["hover", "focus"],
+    },
   },
   plugins: [],
   corePlugins: {
