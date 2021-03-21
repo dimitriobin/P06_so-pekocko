@@ -4,10 +4,12 @@ import "./App.css";
 
 import SauceList from "./components/SaucesList";
 import Sauce from "./components/Sauce";
+import AddSauce from "./components/AddSauce";
 
 function App() {
+  const addSauce = false;
   return (
-    <div className="App min-h-screen flex flex-col justify-between items-center">
+    <div className="App min-h-screen flex flex-col justify-between items-center relative">
       <nav className="w-full flex items-center justify-center mb-10 lg:mb-20">
         <Link to={"/sauces"}>
           <img
@@ -26,6 +28,7 @@ function App() {
           <Route path={"/sauce/:id"} component={Sauce} />
         </div>
       </Switch>
+      {addSauce && <AddSauce />}
       <footer className="bg-gray-900 text-white w-full p-10 flex flex-wrap justify-evenly items-center mt-20">
         <p className="my-1">Copyright 2021</p>
         <a className="underline my-1" href="dimitriobin.com">
