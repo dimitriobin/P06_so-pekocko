@@ -42,14 +42,10 @@ exports.readOneSauce = (req, res, next) => {
 };
 
 exports.updateOneSauce = (req, res, next) => {
-  const sauceObject = req.file
-    ? {
-        ...req.body,
-        imageUrl: req.file ? req.file.location : null,
-      }
-    : {
-        ...req.body,
-      };
+  const sauceObject = {
+    ...req.body,
+    imageUrl: req.file ? req.file.location : null,
+  };
 
   Sauce.findByIdAndUpdate(req.params.id, {
     ...sauceObject,
