@@ -3,6 +3,8 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { useRef, useState } from "react";
 import { isLength } from "validator";
+import authService from "../services/AuthServices";
+import sauceService from "../services/SaucesServices";
 
 const required = (value) => {
   if (!value) {
@@ -24,14 +26,16 @@ const length = (value) => {
   }
 };
 
+const userId = authService.getCurrentUser().userId;
+
 function AddSauce(props) {
   const initialSauce = {
-    userId: "",
+    userId,
     name: "",
     manufacturer: "",
     description: "",
     mainPepper: "",
-    imageUrl: false,
+    imageUrl: null,
     heat: 0,
   };
   const [sauce, setSauce] = useState(initialSauce);
@@ -48,8 +52,22 @@ function AddSauce(props) {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     form.current.validateAll();
-    if (checkBtn.current.context._errors === 0) {
-      console.log(checkBtn.current.context._errors.length);
+    if (checkBtn.current.context._errors.length === 0) {
+      const fd = new FormData();
+      Object.entries(sauce).forEach(([key, value]) => {
+        if (value !== null && value !== "") {
+          fd.append(`${key}`, value);
+        }
+      });
+      console.log(fd);
+      sauceService
+        .createOne(fd)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
