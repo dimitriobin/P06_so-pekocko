@@ -62,7 +62,6 @@ function AddSauce(props) {
       sauceService
         .createOne(fd)
         .then((response) => {
-          console.log(response.data);
           props.onDataSubmit(response.data);
           props.showSauceForm(false);
         })
