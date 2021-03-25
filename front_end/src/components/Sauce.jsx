@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import SauceDataService from "../services/SaucesServices";
 import AuthDataService from "../services/AuthServices";
 
-const userId = AuthDataService.getCurrentUser();
+const userId = AuthDataService.getCurrentUser().userId;
 
 const imageObject = {
   hot1,
@@ -69,7 +69,17 @@ function Sauce(props) {
         <h1 className="text-6xl font-bold mt-5 mb-2">{sauce.name}</h1>
         <p className="italic text-xl mb-3">by {sauce.manufacturer}</p>
         <p>{sauce.description}</p>
-        <div className="flex justify-evenly lg:justify-start items-center mt-8">
+        {sauce.userId === userId && (
+          <div className="my-4">
+            <button className="bg-yellow-500 p-3 font-medium rounded-full shadow-lg my-2 mr-2 text-white">
+              update
+            </button>
+            <button className="bg-red-500 p-3 font-medium rounded-full shadow-lg my-2 text-white">
+              delete
+            </button>
+          </div>
+        )}
+        <div className="flex justify-evenly lg:justify-start items-center">
           <button aria-label="Like the sauce">
             <i className="far fa-thumbs-up fa-4x lg:mx-5"></i>
           </button>
