@@ -10,10 +10,7 @@ exports.createOneSauce = (req, res, next) => {
   });
   sauce
     .save()
-    .then((response) => {
-      console.log(response);
-      res.status(201).json({ message: "Sauce saved" });
-    })
+    .then((response) => res.status(201).json(response))
     .catch((error) => res.status(400).json({ error }));
 };
 

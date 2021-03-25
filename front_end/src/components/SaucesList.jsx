@@ -1,11 +1,35 @@
+import { useState } from "react";
+
 import SauceCard from "./SauceCard";
+import AddSauce from "./AddSauce";
 
 function SaucesList() {
+  const [sauceFormActive, setsauceFormActive] = useState(false);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+
+    setsauceFormActive(true);
+  };
+
+  const displayNewSauce = (data) => {
+    console.log(data);
+  };
+
   return (
     <>
-      <button className="underline mb-8 mx-auto block text-xl">
+      <button
+        onClick={handleClick}
+        className="underline mb-8 mx-auto block text-xl"
+      >
         Add a new sauce
       </button>
+      {sauceFormActive && (
+        <AddSauce
+          showSauceForm={setsauceFormActive}
+          onDataSubmit={displayNewSauce}
+        />
+      )}
       <div className="grid grid-cols-auto-fill xl:grid-cols-4 gap-10 content-center justify-center">
         <SauceCard sauce={{ id: 1, rank: 5 }} />
         <SauceCard sauce={{ id: 2, rank: 4 }} />

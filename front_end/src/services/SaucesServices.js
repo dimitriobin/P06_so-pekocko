@@ -1,25 +1,37 @@
 import http from "../http-common";
+import authHeader from "./auth-header";
 
-exports.getAll = () => {
-  return http.get("/sauces");
+const getAll = () => {
+  return http.get("/sauces", { headers: authHeader() });
 };
 
-exports.createOne = (data) => {
-  return http.post("/sauces", data);
+const createOne = (data) => {
+  return http.post("/sauces", data, { headers: authHeader() });
 };
 
-exports.getOne = (id) => {
-  return http.get(`/sauces/${id}`);
+const getOne = (id) => {
+  return http.get(`/sauces/${id}`, { headers: authHeader() });
 };
 
-exports.updateOne = (id, data) => {
-  return http.put(`/sauces/${id}`, data);
+const updateOne = (id, data) => {
+  return http.put(`/sauces/${id}`, data, { headers: authHeader() });
 };
 
-exports.deleteOne = (id) => {
-  return http.delete(`/sauces/${id}`);
+const deleteOne = (id) => {
+  return http.delete(`/sauces/${id}`, { headers: authHeader() });
 };
 
-exports.likeOne = (id, data) => {
-  return http.post(`/sauces/${id}/like`, data);
+const likeOne = (id, data) => {
+  return http.post(`/sauces/${id}/like`, data, { headers: authHeader() });
 };
+
+const sauceService = {
+  getAll,
+  createOne,
+  getOne,
+  updateOne,
+  deleteOne,
+  likeOne,
+};
+
+export default sauceService;
