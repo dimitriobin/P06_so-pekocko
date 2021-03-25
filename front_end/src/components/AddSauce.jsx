@@ -59,11 +59,12 @@ function AddSauce(props) {
           fd.append(`${key}`, value);
         }
       });
-      console.log(fd);
       sauceService
         .createOne(fd)
         .then((response) => {
-          console.log(response);
+          console.log(response.data);
+          props.onDataSubmit(response.data);
+          props.showSauceForm(false);
         })
         .catch((error) => {
           console.log(error);

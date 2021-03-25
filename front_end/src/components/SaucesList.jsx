@@ -12,6 +12,10 @@ function SaucesList() {
     setsauceFormActive(true);
   };
 
+  const displayNewSauce = (data) => {
+    console.log(data);
+  };
+
   return (
     <>
       <button
@@ -20,7 +24,12 @@ function SaucesList() {
       >
         Add a new sauce
       </button>
-      {sauceFormActive && <AddSauce showSauceForm={setsauceFormActive} />}
+      {sauceFormActive && (
+        <AddSauce
+          showSauceForm={setsauceFormActive}
+          onDataSubmit={displayNewSauce}
+        />
+      )}
       <div className="grid grid-cols-auto-fill xl:grid-cols-4 gap-10 content-center justify-center">
         <SauceCard sauce={{ id: 1, rank: 5 }} />
         <SauceCard sauce={{ id: 2, rank: 4 }} />
