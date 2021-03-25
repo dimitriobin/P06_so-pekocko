@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import SauceDataService from "../services/SaucesServices";
 import AuthDataService from "../services/AuthServices";
 
+import AddSauce from "./AddSauce";
+
 const userId = AuthDataService.getCurrentUser().userId;
 
 const imageObject = {
@@ -35,6 +37,7 @@ function Sauce(props) {
   };
 
   const [sauce, setSauce] = useState(initialSauceState);
+  const [edit, setEdit] = useState(false);
 
   const getSauce = (id) => {
     SauceDataService.getOne(id)
@@ -48,11 +51,26 @@ function Sauce(props) {
     getSauce(props.match.params.id);
   }, [props.match.params.id]);
 
+  const onEditChange = () => {
+    setEdit(!edit);
+  };
+
+  const updateSauce = (data) => {
+    SauceDataService.updateOne(props.match.params.id, data)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => console.log(error));
+  };
+
   return (
     <main className="flex flex-col lg:flex-row justify-start lg:justify-center items-center px-10">
       <Link to={"/"}>
         <i className="fas fa-arrow-left fa-3x absolute top-5 md:top-10 lg:top-20 left-5 md:left-10 lg:left-20"></i>
       </Link>
+      {edit && (
+        <AddSauce showSauceForm={onEditChange} onDataSubmit={updateSauce} />
+      )}
       <div className="relative">
         <img
           src={sauce.imageUrl}
@@ -71,7 +89,10 @@ function Sauce(props) {
         <p>{sauce.description}</p>
         {sauce.userId === userId && (
           <div className="my-4">
-            <button className="bg-yellow-500 p-3 font-medium rounded-full shadow-lg my-2 mr-2 text-white">
+            <button
+              onClick={onEditChange}
+              className="bg-yellow-500 p-3 font-medium rounded-full shadow-lg my-2 mr-2 text-white"
+            >
               update
             </button>
             <button className="bg-red-500 p-3 font-medium rounded-full shadow-lg my-2 text-white">

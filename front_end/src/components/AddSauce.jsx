@@ -4,7 +4,6 @@ import CheckButton from "react-validation/build/button";
 import { useRef, useState } from "react";
 import { isLength } from "validator";
 import authService from "../services/AuthServices";
-import sauceService from "../services/SaucesServices";
 
 const required = (value) => {
   if (!value) {
@@ -59,15 +58,8 @@ function AddSauce(props) {
           fd.append(`${key}`, value);
         }
       });
-      sauceService
-        .createOne(fd)
-        .then((response) => {
-          props.onDataSubmit(response.data);
-          props.showSauceForm(false);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      props.onDataSubmit(fd);
+      props.showSauceForm(false);
     }
   };
 

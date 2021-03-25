@@ -28,10 +28,14 @@ function SaucesList() {
       });
   };
 
-  const displayNewSauce = (data) => {
-    console.log(data);
-    setSauces([data, ...sauces]);
-    console.log(sauces);
+  const handleSubmit = (newSauceData) => {
+    SaucesDataService.createOne(newSauceData)
+      .then((response) => {
+        setSauces([response.data, ...sauces]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -45,7 +49,7 @@ function SaucesList() {
       {sauceFormActive && (
         <AddSauce
           showSauceForm={setsauceFormActive}
-          onDataSubmit={displayNewSauce}
+          onDataSubmit={handleSubmit}
         />
       )}
       <div className="grid grid-cols-auto-fill xl:grid-cols-4 gap-10 content-center justify-center">

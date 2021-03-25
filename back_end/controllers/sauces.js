@@ -66,7 +66,7 @@ exports.updateOneSauce = (req, res, next) => {
           },
         );
       }
-      res.status(200).json({ message: "Sauce updated" });
+      res.status(200).json(sauce);
     })
     .catch((error) =>
       res.status(404).send({ error, message: "Sauce not found" }),
