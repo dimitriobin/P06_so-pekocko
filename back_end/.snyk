@@ -1,0 +1,9 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.19.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JS-ISSVG-1085627:
+    - multer-s3 > is-svg:
+        reason: None given
+        expires: '2021-04-23T17:53:24.422Z'
+patch: {}
