@@ -10,7 +10,7 @@ import Signup from "./components/Register";
 import AuthService from "./services/AuthServices";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(undefined);
+  const [currentUser, setCurrentUser] = useState();
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
@@ -56,20 +56,20 @@ function App() {
 
       {currentUser ? (
         <>
-          <Switch>
-            <div className="container mx-auto">
+          <div className="container mx-auto">
+            <Switch>
               <Route exact path={["/", "/sauces"]} component={SauceList} />
               <Route path={"/sauce/:id"} component={Sauce} />
-            </div>
-          </Switch>
+            </Switch>
+          </div>
         </>
       ) : (
-        <Switch>
-          <div className="container mx-auto">
+        <div className="container mx-auto">
+          <Switch>
             <Route exact path={"/login"} component={Login} />
             <Route path={"/signup"} component={Signup} />
-          </div>
-        </Switch>
+          </Switch>
+        </div>
       )}
       <footer className="bg-gray-900 text-white w-full p-10 flex flex-wrap justify-evenly items-center mt-20">
         <p className="my-1">Copyright 2021</p>
