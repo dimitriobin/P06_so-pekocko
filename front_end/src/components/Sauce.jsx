@@ -38,6 +38,7 @@ function Sauce(props) {
   const getSauce = (id) => {
     SauceDataService.getOne(id)
       .then((response) => {
+        console.log(response.data);
         setSauce(response.data);
       })
       .catch((error) => console.log(error));
@@ -67,6 +68,18 @@ function Sauce(props) {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const onLike = () => {
+    const like = sauce.likes > 0 ? 0 : 1;
+    SauceDataService.likeOne(props.match.params.id, { userId, like })
+      .then((response) => {
+        setSauce({
+          ...sauce,
+          likes: like,
+        });
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -118,8 +131,12 @@ function Sauce(props) {
           </div>
         )}
         <div className="flex justify-evenly lg:justify-start items-center">
-          <button aria-label="Like the sauce">
-            <i className="far fa-thumbs-up fa-4x lg:mx-5"></i>
+          <button onClick={onLike} name="like" aria-label="Like the sauce">
+            {sauce.likes > 0 ? (
+              <i className="fas fa-thumbs-up fa-4x lg:mx-5"></i>
+            ) : (
+              <i className="far fa-thumbs-up fa-4x lg:mx-5"></i>
+            )}
           </button>
           <button aria-label="Dislike the sauce">
             <i className="far fa-thumbs-down fa-4x lg:mx-5"></i>
