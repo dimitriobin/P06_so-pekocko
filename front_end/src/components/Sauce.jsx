@@ -61,8 +61,8 @@ function Sauce(props) {
 
   const onDelete = () => {
     SauceDataService.deleteOne(props.match.params.id)
-      .then((response) => {
-        setSauce(false);
+      .then(() => {
+        setSauce({});
       })
       .catch((error) => {
         console.log(error);
@@ -71,7 +71,7 @@ function Sauce(props) {
 
   return (
     <main className="flex flex-col lg:flex-row justify-start lg:justify-center items-center px-10">
-      {!sauce && <Redirect to="/" />}
+      {Object.keys(sauce).length === 0 && <Redirect to="/" />}
       <Link to={"/"}>
         <i className="fas fa-arrow-left fa-3x absolute top-5 md:top-10 lg:top-20 left-5 md:left-10 lg:left-20"></i>
       </Link>
