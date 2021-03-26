@@ -30,15 +30,20 @@ function Sauce(props) {
     manufacturer: "",
     name: "",
     userId,
+    usersLiked: [],
+    usersDisliked: [],
+    likes: 0,
+    dislikes: 0,
   };
 
   const [sauce, setSauce] = useState(initialSauceState);
   const [edit, setEdit] = useState(false);
+  const [deleted, setDeleted] = useState(false);
 
   const getSauce = (id) => {
     SauceDataService.getOne(id)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setSauce(response.data);
       })
       .catch((error) => console.log(error));
@@ -63,7 +68,7 @@ function Sauce(props) {
   const onDelete = () => {
     SauceDataService.deleteOne(props.match.params.id)
       .then(() => {
-        setSauce({});
+        setDeleted(true);
       })
       .catch((error) => {
         console.log(error);
@@ -76,7 +81,8 @@ function Sauce(props) {
       .then((response) => {
         setSauce({
           ...sauce,
-          likes: like,
+          likes: like > 0 ? 1 : 0,
+          usersLiked: like > 0 ? [userId] : [],
         });
         console.log(sauce.likes);
       })
@@ -84,12 +90,13 @@ function Sauce(props) {
   };
 
   const onDislike = () => {
-    const like = sauce.dislikes < 0 ? 0 : -1;
+    const like = sauce.dislikes > 0 ? 0 : -1;
     SauceDataService.likeOne(props.match.params.id, { userId, like })
       .then((response) => {
         setSauce({
           ...sauce,
-          dislikes: like,
+          dislikes: like < 0 ? 1 : 0,
+          usersDisliked: like < 0 ? [userId] : [],
         });
         console.log(sauce.dislikes);
       })
@@ -98,7 +105,7 @@ function Sauce(props) {
 
   return (
     <main className="flex flex-col lg:flex-row justify-start lg:justify-center items-center px-10">
-      {Object.keys(sauce).length === 0 && <Redirect to="/" />}
+      {deleted && <Redirect to="/" />}
       <Link to={"/"}>
         <i className="fas fa-arrow-left fa-3x absolute top-5 md:top-10 lg:top-20 left-5 md:left-10 lg:left-20"></i>
       </Link>
@@ -149,9 +156,16 @@ function Sauce(props) {
             onClick={onLike}
             name="like"
             aria-label="Like the sauce"
-            className={sauce.dislikes < 0 ? "cursor-not-allowed" : ""}
-            disabled={sauce.dislikes < 0}
+            className={
+              sauce.dislikes > 0 ? "cursor-not-allowed tooltip" : "tooltip"
+            }
+            disabled={sauce.dislikes > 0}
           >
+            {sauce.usersLiked.length > 0 && (
+              <span className="tooltiptext">
+                {sauce.usersLiked.length} persons like this sauce
+              </span>
+            )}
             {sauce.likes > 0 ? (
               <i className="fas fa-thumbs-up fa-4x lg:mx-5"></i>
             ) : (
@@ -162,11 +176,18 @@ function Sauce(props) {
             onClick={onDislike}
             name="dislike"
             aria-label="Dislike the sauce"
-            className={sauce.likes > 0 ? "cursor-not-allowed" : ""}
+            className={
+              sauce.likes > 0 ? "cursor-not-allowed tooltip" : "tooltip"
+            }
             disabled={sauce.likes > 0}
           >
-            {sauce.dislikes < 0 ? (
-              <i className="fas fa-thumbs-down fa-4x lg:mx-5"></i>
+            {sauce.usersDisliked.length > 0 && (
+              <span className="tooltiptext">
+                {sauce.usersDisliked.length} persons doesn't like this sauce
+              </span>
+            )}
+            {sauce.dislikes > 0 ? (
+              <i className="fas fa-thumbs-down fa-4x lg:mx-5 relative"></i>
             ) : (
               <i className="far fa-thumbs-down fa-4x lg:mx-5"></i>
             )}
