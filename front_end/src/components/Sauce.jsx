@@ -4,7 +4,7 @@ import hot2 from "../assets/img/hot_rank_2.svg";
 import hot3 from "../assets/img/hot_rank_3.svg";
 import hot4 from "../assets/img/hot_rank_4.svg";
 import hot5 from "../assets/img/hot_rank_5.svg";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import SauceDataService from "../services/SaucesServices";
 import AuthDataService from "../services/AuthServices";
@@ -59,8 +59,19 @@ function Sauce(props) {
       .catch((error) => console.log(error));
   };
 
+  const onDelete = () => {
+    SauceDataService.deleteOne(props.match.params.id)
+      .then(() => {
+        setSauce({});
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <main className="flex flex-col lg:flex-row justify-start lg:justify-center items-center px-10">
+      {Object.keys(sauce).length === 0 && <Redirect to="/" />}
       <Link to={"/"}>
         <i className="fas fa-arrow-left fa-3x absolute top-5 md:top-10 lg:top-20 left-5 md:left-10 lg:left-20"></i>
       </Link>
@@ -98,7 +109,10 @@ function Sauce(props) {
             >
               update
             </button>
-            <button className="bg-red-500 p-3 font-medium rounded-full shadow-lg my-2 text-white">
+            <button
+              onClick={onDelete}
+              className="bg-red-500 p-3 font-medium rounded-full shadow-lg my-2 text-white"
+            >
               delete
             </button>
           </div>
