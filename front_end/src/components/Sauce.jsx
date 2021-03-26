@@ -78,6 +78,20 @@ function Sauce(props) {
           ...sauce,
           likes: like,
         });
+        console.log(sauce.likes);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const onDislike = () => {
+    const like = sauce.dislikes < 0 ? 0 : -1;
+    SauceDataService.likeOne(props.match.params.id, { userId, like })
+      .then((response) => {
+        setSauce({
+          ...sauce,
+          dislikes: like,
+        });
+        console.log(sauce.dislikes);
       })
       .catch((error) => console.log(error));
   };
@@ -131,15 +145,31 @@ function Sauce(props) {
           </div>
         )}
         <div className="flex justify-evenly lg:justify-start items-center">
-          <button onClick={onLike} name="like" aria-label="Like the sauce">
+          <button
+            onClick={onLike}
+            name="like"
+            aria-label="Like the sauce"
+            className={sauce.dislikes < 0 ? "cursor-not-allowed" : ""}
+            disabled={sauce.dislikes < 0}
+          >
             {sauce.likes > 0 ? (
               <i className="fas fa-thumbs-up fa-4x lg:mx-5"></i>
             ) : (
               <i className="far fa-thumbs-up fa-4x lg:mx-5"></i>
             )}
           </button>
-          <button aria-label="Dislike the sauce">
-            <i className="far fa-thumbs-down fa-4x lg:mx-5"></i>
+          <button
+            onClick={onDislike}
+            name="dislike"
+            aria-label="Dislike the sauce"
+            className={sauce.likes > 0 ? "cursor-not-allowed" : ""}
+            disabled={sauce.likes > 0}
+          >
+            {sauce.dislikes < 0 ? (
+              <i className="fas fa-thumbs-down fa-4x lg:mx-5"></i>
+            ) : (
+              <i className="far fa-thumbs-down fa-4x lg:mx-5"></i>
+            )}
           </button>
         </div>
       </div>
