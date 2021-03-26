@@ -11,8 +11,6 @@ import AuthDataService from "../services/AuthServices";
 
 import AddSauce from "./AddSauce";
 
-const userId = AuthDataService.getCurrentUser().userId;
-
 const imageObject = {
   hot1,
   hot2,
@@ -22,18 +20,16 @@ const imageObject = {
 };
 
 function Sauce(props) {
+  const userId = AuthDataService.getCurrentUser().userId;
+
   const initialSauceState = {
     description: "",
-    dislikes: "",
     heat: "",
     imageUrl: null,
-    likes: "",
     mainPepper: "",
     manufacturer: "",
     name: "",
     userId,
-    usersDisliked: [],
-    usersLiked: [],
   };
 
   const [sauce, setSauce] = useState(initialSauceState);
@@ -58,7 +54,7 @@ function Sauce(props) {
   const updateSauce = (data) => {
     SauceDataService.updateOne(props.match.params.id, data)
       .then((response) => {
-        console.log(response.data);
+        setSauce(response.data);
       })
       .catch((error) => console.log(error));
   };
@@ -69,7 +65,11 @@ function Sauce(props) {
         <i className="fas fa-arrow-left fa-3x absolute top-5 md:top-10 lg:top-20 left-5 md:left-10 lg:left-20"></i>
       </Link>
       {edit && (
-        <AddSauce showSauceForm={onEditChange} onDataSubmit={updateSauce} />
+        <AddSauce
+          value={sauce}
+          showSauceForm={onEditChange}
+          onDataSubmit={updateSauce}
+        />
       )}
       <div className="relative">
         <img
@@ -85,6 +85,9 @@ function Sauce(props) {
       </div>
       <div className="w-full lg:w-1/2 text-center lg:text-left lg:ml-10">
         <h1 className="text-6xl font-bold mt-5 mb-2">{sauce.name}</h1>
+        <h2 className=" text-3xl font-medium mb-2">
+          Made with {sauce.mainPepper}
+        </h2>
         <p className="italic text-xl mb-3">by {sauce.manufacturer}</p>
         <p>{sauce.description}</p>
         {sauce.userId === userId && (

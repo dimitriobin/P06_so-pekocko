@@ -32,6 +32,11 @@ exports.sauceInputValidation = (req, res, next) => {
     description: Joi.string().required(),
     mainPepper: Joi.string().required(),
     heat: Joi.number().min(1).max(10).required(),
+    likes: Joi.number(),
+    dislikes: Joi.number(),
+    usersLiked: Joi.array(),
+    usersDisliked: Joi.array(),
+    imageUrl: Joi.any(),
   });
 
   // const sauceObject = req.file
