@@ -4,7 +4,6 @@ import CheckButton from "react-validation/build/button";
 import { useRef, useState } from "react";
 import { isLength } from "validator";
 import authService from "../services/AuthServices";
-import sauceService from "../services/SaucesServices";
 
 const required = (value) => {
   if (!value) {
@@ -26,20 +25,24 @@ const length = (value) => {
   }
 };
 
-const userId = authService.getCurrentUser().userId;
-
 function AddSauce(props) {
+  const userId = authService.getCurrentUser().userId;
+
+  const value = props.value;
+
   const initialSauce = {
     userId,
-    name: "",
-    manufacturer: "",
-    description: "",
-    mainPepper: "",
-    imageUrl: null,
-    heat: 0,
+    name: value.name ? value.name : "",
+    manufacturer: value.manufacturer ? value.manufacturer : "",
+    description: value.description ? value.description : "",
+    mainPepper: value.mainPepper ? value.mainPepper : "",
+    imageUrl: value.imageUrl ? value.imageUrl : null,
+    heat: value.heat ? value.heat : 0,
   };
   const [sauce, setSauce] = useState(initialSauce);
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState(
+    props.value ? props.value.imageUrl : null,
+  );
   const form = useRef();
   const checkBtn = useRef();
   const imageInput = useRef();
@@ -59,15 +62,8 @@ function AddSauce(props) {
           fd.append(`${key}`, value);
         }
       });
-      sauceService
-        .createOne(fd)
-        .then((response) => {
-          props.onDataSubmit(response.data);
-          props.showSauceForm(false);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      props.onDataSubmit(fd);
+      props.showSauceForm(false);
     }
   };
 
@@ -170,7 +166,6 @@ function AddSauce(props) {
           id="image"
           className="hidden"
           ref={imageInput}
-          validations={[required]}
           onChange={handleChange}
         />
         <label htmlFor="rank" className="font-medium mb-1">

@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import SauceDataService from "../services/SaucesServices";
 import AuthDataService from "../services/AuthServices";
 
-const userId = AuthDataService.getCurrentUser().userId;
+import AddSauce from "./AddSauce";
 
 const imageObject = {
   hot1,
@@ -20,21 +20,20 @@ const imageObject = {
 };
 
 function Sauce(props) {
+  const userId = AuthDataService.getCurrentUser().userId;
+
   const initialSauceState = {
     description: "",
-    dislikes: "",
     heat: "",
     imageUrl: null,
-    likes: "",
     mainPepper: "",
     manufacturer: "",
     name: "",
     userId,
-    usersDisliked: [],
-    usersLiked: [],
   };
 
   const [sauce, setSauce] = useState(initialSauceState);
+  const [edit, setEdit] = useState(false);
 
   const getSauce = (id) => {
     SauceDataService.getOne(id)
@@ -48,11 +47,30 @@ function Sauce(props) {
     getSauce(props.match.params.id);
   }, [props.match.params.id]);
 
+  const onEditChange = () => {
+    setEdit(!edit);
+  };
+
+  const updateSauce = (data) => {
+    SauceDataService.updateOne(props.match.params.id, data)
+      .then((response) => {
+        setSauce(response.data);
+      })
+      .catch((error) => console.log(error));
+  };
+
   return (
     <main className="flex flex-col lg:flex-row justify-start lg:justify-center items-center px-10">
       <Link to={"/"}>
         <i className="fas fa-arrow-left fa-3x absolute top-5 md:top-10 lg:top-20 left-5 md:left-10 lg:left-20"></i>
       </Link>
+      {edit && (
+        <AddSauce
+          value={sauce}
+          showSauceForm={onEditChange}
+          onDataSubmit={updateSauce}
+        />
+      )}
       <div className="relative">
         <img
           src={sauce.imageUrl}
@@ -67,11 +85,17 @@ function Sauce(props) {
       </div>
       <div className="w-full lg:w-1/2 text-center lg:text-left lg:ml-10">
         <h1 className="text-6xl font-bold mt-5 mb-2">{sauce.name}</h1>
+        <h2 className=" text-3xl font-medium mb-2">
+          Made with {sauce.mainPepper}
+        </h2>
         <p className="italic text-xl mb-3">by {sauce.manufacturer}</p>
         <p>{sauce.description}</p>
         {sauce.userId === userId && (
           <div className="my-4">
-            <button className="bg-yellow-500 p-3 font-medium rounded-full shadow-lg my-2 mr-2 text-white">
+            <button
+              onClick={onEditChange}
+              className="bg-yellow-500 p-3 font-medium rounded-full shadow-lg my-2 mr-2 text-white"
+            >
               update
             </button>
             <button className="bg-red-500 p-3 font-medium rounded-full shadow-lg my-2 text-white">
