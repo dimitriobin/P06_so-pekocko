@@ -30,7 +30,7 @@ function App() {
   return (
     <div className="App min-h-screen flex flex-col justify-between items-center relative">
       <nav className="container relative flex items-center justify-center mb-10 lg:mb-20">
-        <Link to={"/"}>
+        <Link to={currentUser ? "/" : "/login"}>
           <img
             src={logo}
             alt="logo de l'application"
@@ -58,7 +58,7 @@ function App() {
         <>
           <div className="container mx-auto">
             <Switch>
-              <Route exact path={["/", "/sauces"]} component={SauceList} />
+              <Route exact path={"/"} component={SauceList} />
               <Route path={"/sauce/:id"} component={Sauce} />
             </Switch>
           </div>
@@ -66,7 +66,7 @@ function App() {
       ) : (
         <div className="container mx-auto">
           <Switch>
-            <Route exact path={["/", "/login"]} component={Login} />
+            <Route exact path={"/login"} component={Login} />
             <Route path={"/signup"} component={Signup} />
           </Switch>
         </div>
