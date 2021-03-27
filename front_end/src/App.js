@@ -20,11 +20,11 @@ function App() {
     }
   }, []);
 
-  const handeLogout = (e) => {
+  const handelLogout = (e) => {
     e.preventDefault();
 
     AuthService.logout();
-    window.location.reload();
+    setCurrentUser(undefined);
   };
 
   return (
@@ -39,13 +39,13 @@ function App() {
         </Link>
         {currentUser ? (
           <button
-            onClick={handeLogout}
+            onClick={handelLogout}
             className="absolute top-5 md:top-10 lg:top-20 right-5 md:right-10 lg:right-20"
           >
             <i className="fas fa-sign-out-alt fa-3x"></i>
           </button>
         ) : (
-          <div className="absolute right-0">
+          <div className="absolute top-5 md:top-10 lg:top-20 right-5 md:right-10 lg:right-20">
             <Link to={"/signup"} className="mr-5">
               Signup
             </Link>
@@ -66,14 +66,14 @@ function App() {
       ) : (
         <div className="container mx-auto">
           <Switch>
-            <Route exact path={"/login"} component={Login} />
+            <Route exact path={["/", "/login"]} component={Login} />
             <Route path={"/signup"} component={Signup} />
           </Switch>
         </div>
       )}
       <footer className="bg-gray-900 text-white w-full p-10 flex flex-wrap justify-evenly items-center mt-20">
         <p className="my-1">Copyright 2021</p>
-        <a className="underline my-1" href="dimitriobin.com">
+        <a className="underline my-1" href="https://dimitriobin.com">
           dimitriobin.com
         </a>
         <a className="underline my-1" href="mailto:dimitriobin@gmail.com">
