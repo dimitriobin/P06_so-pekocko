@@ -43,7 +43,6 @@ function Sauce(props) {
   const getSauce = (id) => {
     SauceDataService.getOne(id)
       .then((response) => {
-        // console.log(response.data);
         setSauce(response.data);
       })
       .catch((error) => console.log(error));
@@ -84,7 +83,6 @@ function Sauce(props) {
           likes: like > 0 ? 1 : 0,
           usersLiked: like > 0 ? [userId] : [],
         });
-        console.log(sauce.likes);
       })
       .catch((error) => console.log(error));
   };

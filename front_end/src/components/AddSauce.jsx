@@ -32,12 +32,12 @@ function AddSauce(props) {
 
   const initialSauce = {
     userId,
-    name: value.name ? value.name : "",
-    manufacturer: value.manufacturer ? value.manufacturer : "",
-    description: value.description ? value.description : "",
-    mainPepper: value.mainPepper ? value.mainPepper : "",
-    imageUrl: value.imageUrl ? value.imageUrl : null,
-    heat: value.heat ? value.heat : 0,
+    name: value ? value.name : "",
+    manufacturer: value ? value.manufacturer : "",
+    description: value ? value.description : "",
+    mainPepper: value ? value.mainPepper : "",
+    imageUrl: value ? value.imageUrl : null,
+    heat: value ? value.heat : 0,
   };
   const [sauce, setSauce] = useState(initialSauce);
   const [preview, setPreview] = useState(
