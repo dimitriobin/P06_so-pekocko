@@ -40,7 +40,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://dimitriobin.github.io/so-peckoko",
+  "homepage": "https://elegant-davinci-4dfe5a.netlify.app/",
   "devDependencies": {
     "@tailwindcss/postcss7-compat": "^2.0.4",
     "autoprefixer": "^9.8.6",
