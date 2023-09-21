@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createUser,
+  loginUser,
   readAllUsers,
   readUser,
   updateUser,
@@ -8,7 +9,8 @@ import {
 } from "../controllers/users";
 const router = Router();
 
-router.post("/", createUser);
+router.post("/register", createUser);
+router.post("/login", loginUser);
 router.get("/", readAllUsers);
 router.get("/:id", readUser);
 router.patch("/:id", updateUser);

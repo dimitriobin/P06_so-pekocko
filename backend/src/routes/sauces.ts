@@ -1,5 +1,5 @@
-// const router = require("express").Router();
 import { Router } from "express";
+import { AuthMiddleware } from "../middlewares/auth";
 import {
   readAllSauces,
   createOneSauce,
@@ -12,7 +12,7 @@ const router = Router();
 // const uploadImage = require("../middleware/multer-config");
 // const { sauceInputValidation } = require("../middleware/inputValidation");
 
-router.get("/", readAllSauces);
+router.get("/", AuthMiddleware, readAllSauces);
 router.get("/:id", readOneSauce);
 router.post("/", createOneSauce);
 router.patch("/:id", updateOneSauce);

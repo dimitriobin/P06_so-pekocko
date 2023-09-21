@@ -7,6 +7,6 @@ const app: Express = express();
 app.use(express.json());
 
 app.use("/api/sauces", sauceRouter);
-app.use("/api/users", userRouter);
+app.use("/api/auth", userRouter);
 
 module.exports = app;

@@ -10,6 +10,7 @@ services:
     command: npm run dev
     environment:
       - NODE_ENV=development
+      - TOKEN_SECRET=${TOKEN_SECRET}
     ports:
       - 80:80
       - 9229:9229
