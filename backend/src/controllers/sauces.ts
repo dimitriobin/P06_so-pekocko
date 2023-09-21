@@ -1,20 +1,6 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 const prisma = new PrismaClient();
-// const Sauce = require("../models/Sauce");
-// const s3 = require("../aws-config");
-
-// exports.createOneSauce = (req, res, next) => {
-//   delete req.body._id;
-//   const sauce = new Sauce({
-//     ...req.body,
-//     imageUrl: req.file ? req.file.location : null,
-//   });
-//   sauce
-//     .save()
-//     .then((response) => res.status(201).json(response))
-//     .catch((error) => res.status(400).json({ error }));
-// };
 
 export async function createOneSauce(req: Request, res: Response) {
   try {
@@ -57,92 +43,71 @@ export async function readAllSauces(req: Request, res: Response) {
   }
 }
 
-// exports.readOneSauce = (req, res, next) => {
-//   Sauce.findById(req.params.id)
-//     .then((sauce) => {
-//       res.status(200).json(sauce);
-//     })
-//     .catch((error) =>
-//       res.status(404).json({ error: error, message: "Sauce not found" }),
-//     );
-// };
+export async function readOneSauce(req: Request, res: Response) {
+  try {
+    const { id }: { id?: string } = req.params;
+    const sauce = await prisma.sauce.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    res.status(200).json(sauce);
+  } catch (error) {
+    res.status(404).json({ error: error, message: "Sauce not found" });
+  }
+}
 
-// exports.updateOneSauce = (req, res, next) => {
-//   const sauceObject = {
-//     ...req.body,
-//     imageUrl: req.file ? req.file.location : req.body.imageUrl,
-//   };
+export async function updateOneSauce(req: Request, res: Response) {
+  try {
+    const { id }: { id?: string } = req.params;
+    const {
+      name,
+      manufacturer,
+      description,
+      mainPepper,
+      imageUrl,
+      heat,
+      userId,
+    } = req.body;
 
-//   Sauce.findByIdAndUpdate(req.params.id, {
-//     ...sauceObject,
-//     _id: req.params.id,
-//   })
-//     .then((sauce) => {
-//       if (req.file && sauce.imageUrl !== null) {
-//         s3.deleteObject(
-//           {
-//             Bucket: "so-peckoko",
-//             Key: sauce.imageUrl.split(
-//               "https://so-peckoko.s3.eu-west-3.amazonaws.com/",
-//             )[1],
-//           },
-//           (err, data) => {
-//             if (err) {
-//               console.log(err, err.stack);
-//             } else {
-//               console.log(data);
-//             }
-//           },
-//         );
-//       }
-//       Sauce.findById(req.params.id)
-//         .then((sauceUpdated) => {
-//           res.status(200).json(sauceUpdated);
-//         })
-//         .catch((error) =>
-//           res.status(404).send({ error, message: "Sauce not found" }),
-//         );
-//     })
-//     .catch((error) =>
-//       res.status(404).send({ error, message: "Sauce not found" }),
-//     );
-// };
+    const sauce = await prisma.sauce.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        name,
+        manufacturer,
+        description,
+        mainPepper,
+        imageUrl,
+        heat,
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
+    res.status(200).json(sauce);
+  } catch (error) {
+    res.status(404).json({ error: error, message: "Sauce not found" });
+  }
+}
 
-// exports.deleteOneSauce = (req, res, next) => {
-//   Sauce.findById(req.params.id)
-//     .then((sauce) => {
-//       s3.deleteObject(
-//         {
-//           Bucket: "so-peckoko",
-//           Key: sauce.imageUrl.split(
-//             "https://so-peckoko.s3.eu-west-3.amazonaws.com/",
-//           )[1],
-//         },
-//         (err, data) => {
-//           if (err) {
-//             console.log(err, err.stack);
-//           } else {
-//             console.log(data);
-//           }
-//         },
-//       );
-//       Sauce.deleteOne({
-//         _id: req.params.id,
-//       })
-//         .then(() => {
-//           res.status(200).json({
-//             message: "Sauce deleted",
-//           });
-//         })
-//         .catch((error) => {
-//           res.status(500).json({ error });
-//         });
-//     })
+export async function deleteOneSauce(req: Request, res: Response) {
+  try {
+    const { id }: { id?: string } = req.params;
 
-//     .catch((error) => {
-//       res.status(404).json({ error, message: "Sauce not found" });
-//     });
-// };
+    await prisma.sauce.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    res.status(200).json({ message: "sauce deleted" });
+  } catch (error) {
+    res.status(404).json({ error: error, message: "Sauce not found" });
+  }
+}
 
 // exports.likeOneSauce = (req, res, next) => {
 //   Sauce.findById(req.params.id)
