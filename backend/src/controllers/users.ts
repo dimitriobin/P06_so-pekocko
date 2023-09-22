@@ -1,15 +1,18 @@
 import { Request, Response } from "express";
-import { Prisma, PrismaClient } from "@prisma/client";
-import { json } from "stream/consumers";
+import bcrypt from "bcrypt";
+import { PrismaClient } from "@prisma/client";
+import jwt from "jsonwebtoken";
 const prisma = new PrismaClient();
 
 export async function createUser(req: Request, res: Response) {
   try {
     const { email, name, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 8);
     const user = await prisma.user.create({
       data: {
         email,
         name,
+        password: hashedPassword,
       },
     });
     res.status(201).json(user);
@@ -21,13 +24,24 @@ export async function createUser(req: Request, res: Response) {
 export async function loginUser(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
-    const user = await prisma.user.create({
-      data: {
+    const secretTokenKey = process.env.TOKEN_SECRET as string;
+    const user = await prisma.user.findUnique({
+      where: {
         email,
-        name,
       },
     });
-    res.status(201).json(user);
+
+    if (!user) throw new Error("User does not exist");
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (isMatch) {
+      const token = jwt.sign({ id: user.id.toString() }, secretTokenKey, {
+        expiresIn: "2 days",
+      });
+      res.status(201).json({ user, token });
+    } else {
+      throw new Error("Invalid credentials");
+    }
   } catch (error) {
     res.status(400).json({ error });
   }

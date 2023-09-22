@@ -5,8 +5,8 @@
 - [x] update one sauce
 - [x] delete one sauce
 - [ ] like one sauce
-- [ ] Authentication
+- [x] Authentication
 - [ ] Security
-- [ ] Errors handling
+- [x] Errors handling
 - [ ] Install & setup eslint prettier
 - [ ] Add Types

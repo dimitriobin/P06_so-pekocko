@@ -8,15 +8,14 @@ import {
   deleteOneSauce,
 } from "../controllers/sauces";
 const router = Router();
-// const auth = require("../middleware/auth");
 // const uploadImage = require("../middleware/multer-config");
 // const { sauceInputValidation } = require("../middleware/inputValidation");
 
-router.get("/", AuthMiddleware, readAllSauces);
-router.get("/:id", readOneSauce);
-router.post("/", createOneSauce);
-router.patch("/:id", updateOneSauce);
-router.delete("/:id", deleteOneSauce);
+router.get("/", AuthMiddleware, AuthMiddleware, readAllSauces);
+router.get("/:id", AuthMiddleware, readOneSauce);
+router.post("/", AuthMiddleware, createOneSauce);
+router.patch("/:id", AuthMiddleware, updateOneSauce);
+router.delete("/:id", AuthMiddleware, deleteOneSauce);
 // router.post("/:id/like", auth, likeOneSauce);
 
 export default router;
