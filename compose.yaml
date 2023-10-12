@@ -47,19 +47,20 @@ services:
     networks:
       - public
       - private
-  # frontend:
-  #   build:
-  #     context: frontend
-  #     target: development
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - ./frontend/src:/code/src
-  #     - /code/node_modules
-  #   networks:
-  #     - public
-  #   depends_on:
-  #     - backend
+  frontend:
+    build:
+      context: frontend
+      target: development
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+      - ./frontend/src:/code/src
+      - /code/node_modules
+    networks:
+      - public
+    depends_on:
+      - backend
 networks:
   public:
   private:
