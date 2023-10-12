@@ -18,15 +18,35 @@ model Sauce {
   mainPepper   String
   imageUrl     String
   heat         Int
-  likes        Int      @default(0)
-  dislikes     Int      @default(0)
+  likes        Likes[] 
+  dislikes      Dislikes[]     
   user         User     @relation(fields: [userId], references: [id])
 }
 
-model User {
+model Likes {
   id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  password String
-  sauces Sauce[]
+  user          User     @relation(fields: [userId], references: [id])
+  userId        Int      
+  sauce         Sauce     @relation(fields: [sauceId], references: [id])
+  sauceId       Int      
+
+}
+
+model Dislikes {
+  id    Int     @id @default(autoincrement())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        Int      
+  sauce         Sauce     @relation(fields: [sauceId], references: [id])
+  sauceId       Int      
+
+}
+
+model User {
+  id            Int     @id @default(autoincrement())
+  email         String  @unique
+  name          String?
+  password      String
+  sauces        Sauce[]
+  likes         Likes[]
+  dislikes      Dislikes[]
 }

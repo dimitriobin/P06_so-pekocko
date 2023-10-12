@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-  createUser,
+  register,
   loginUser,
   readAllUsers,
   readUser,
@@ -10,7 +10,7 @@ import {
 import { AuthMiddleware } from "../middlewares/auth";
 const router = Router();
 
-router.post("/register", createUser);
+router.post("/register", register);
 router.post("/login", loginUser);
 router.get("/", AuthMiddleware, readAllUsers);
 router.get("/:id", AuthMiddleware, readUser);

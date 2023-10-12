@@ -1,33 +1,23 @@
-import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-const prisma = new PrismaClient();
+import {
+  createSauce,
+  deleteSauce,
+  readSauce,
+  readSauces,
+  updateSauce,
+} from "../services/api/sauces";
+import {
+  createDislike,
+  createLike,
+  deleteDislike,
+  deleteLike,
+  findDislike,
+  findLike,
+} from "../services/api/likes";
 
 export async function createOneSauce(req: Request, res: Response) {
   try {
-    const {
-      name,
-      manufacturer,
-      description,
-      mainPepper,
-      imageUrl,
-      heat,
-      userId,
-    } = req.body;
-    const sauce = await prisma.sauce.create({
-      data: {
-        name,
-        manufacturer,
-        description,
-        mainPepper,
-        imageUrl,
-        heat,
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
-      },
-    });
+    const sauce = await createSauce(req.body);
     res.status(201).json(sauce);
   } catch (error) {
     res.status(400).json({ error });
@@ -36,7 +26,7 @@ export async function createOneSauce(req: Request, res: Response) {
 
 export async function readAllSauces(req: Request, res: Response) {
   try {
-    const sauces = await prisma.sauce.findMany();
+    const sauces = await readSauces();
     res.json(sauces);
   } catch (error) {
     res.status(400).json({ error });
@@ -46,11 +36,7 @@ export async function readAllSauces(req: Request, res: Response) {
 export async function readOneSauce(req: Request, res: Response) {
   try {
     const { id }: { id?: string } = req.params;
-    const sauce = await prisma.sauce.findUnique({
-      where: {
-        id: Number(id),
-      },
-    });
+    const sauce = await readSauce(id);
     res.status(200).json(sauce);
   } catch (error) {
     res.status(404).json({ error: error, message: "Sauce not found" });
@@ -60,34 +46,8 @@ export async function readOneSauce(req: Request, res: Response) {
 export async function updateOneSauce(req: Request, res: Response) {
   try {
     const { id }: { id?: string } = req.params;
-    const {
-      name,
-      manufacturer,
-      description,
-      mainPepper,
-      imageUrl,
-      heat,
-      userId,
-    } = req.body;
 
-    const sauce = await prisma.sauce.update({
-      where: {
-        id: Number(id),
-      },
-      data: {
-        name,
-        manufacturer,
-        description,
-        mainPepper,
-        imageUrl,
-        heat,
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
-      },
-    });
+    const sauce = await updateSauce(req.body, id);
     res.status(200).json(sauce);
   } catch (error) {
     res.status(404).json({ error: error, message: "Sauce not found" });
@@ -98,97 +58,91 @@ export async function deleteOneSauce(req: Request, res: Response) {
   try {
     const { id }: { id?: string } = req.params;
 
-    await prisma.sauce.delete({
-      where: {
-        id: Number(id),
-      },
-    });
+    await deleteSauce(id);
     res.status(200).json({ message: "sauce deleted" });
   } catch (error) {
     res.status(404).json({ error: error, message: "Sauce not found" });
   }
 }
 
-// exports.likeOneSauce = (req, res, next) => {
-//   Sauce.findById(req.params.id)
-//     .then((sauce) => {
-//       switch (req.body.like) {
-//         // If it is a like
-//         case 1:
-//           // if this user doesn't already like the sauce,
-//           if (!sauce["usersLiked"].includes(req.body.userId)) {
-//             // and this user already dislike the sauce
-//             if (sauce["usersDisliked"].includes(req.body.userId)) {
-//               // the user's Id is removed from the dislike array and pushed into the like array
-//               sauce["usersDisliked"].splice(
-//                 sauce["usersDisliked"].indexOf(req.body.userId),
-//                 1,
-//               );
-//               sauce["usersLiked"].push(req.body.userId);
-//             } else {
-//               sauce["usersLiked"].push(req.body.userId);
-//             }
-//           }
-//           break;
+export async function likeSauce(req: Request, res: Response) {
+  try {
+    const { id }: { id?: string } = req.params;
+    const { userId }: { userId?: string } = req.body;
 
-//         // if it's nolike/nodislike
-//         case 0:
-//           // If the user already like the sauce
-//           if (sauce["usersLiked"].includes(req.body.userId)) {
-//             // remove the user from the like array
-//             sauce["usersLiked"].splice(
-//               sauce["usersLiked"].indexOf(req.body.userId),
-//               1,
-//             );
-//             // if the user already dislike
-//           } else if (sauce["usersDisliked"].includes(req.body.userId)) {
-//             // remove the user from the dislike array
-//             sauce["usersDisliked"].splice(
-//               sauce["usersDisliked"].indexOf(req.body.userId),
-//               1,
-//             );
-//           }
-//           break;
+    if (!userId) throw new Error("please provide the user id");
 
-//         // if it's a dislike
-//         case -1:
-//           // if the user doesn't already dislike the sauce
-//           if (!sauce["usersDisliked"].includes(req.body.userId)) {
-//             // and the user already like the sauce
-//             if (sauce["usersLiked"].includes(req.body.userId)) {
-//               // remove the user from the like array and push the user in the dislike array
-//               sauce["usersLiked"].splice(
-//                 sauce["usersLiked"].indexOf(req.body.userId),
-//                 1,
-//               );
-//               sauce["usersDisliked"].push(req.body.userId);
-//             } else {
-//               sauce["usersDisliked"].push(req.body.userId);
-//             }
-//           }
-//           break;
+    const alreadyLiked = await findLike(id, userId);
+    const alreadyDisliked = await findDislike(id, userId);
 
-//         default:
-//           break;
-//       }
-//       // Set the number of likes and dislikes for this sauce to the length of each according array
-//       sauce["dislikes"] = sauce["usersDisliked"].length;
-//       sauce["likes"] = sauce["usersLiked"].length;
+    if (!alreadyLiked && !alreadyDisliked) {
+      const like = await createLike(id, userId);
+      res.status(201).json(like);
+    } else {
+      throw new Error(
+        `the User with ID ${userId} has already liked the sauce with ID ${id}`
+      );
+    }
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+}
 
-//       Sauce.updateOne(
-//         {
-//           _id: req.params.id,
-//         },
-//         sauce,
-//       )
-//         .then(() => {
-//           res.status(200).json({
-//             message: "The sauce has been updated",
-//           });
-//         })
-//         .catch((err) => {
-//           res.status(500).json({ error });
-//         });
-//     })
-//     .catch((error) => res.status(404).json({ error }));
-// };
+export async function unLikeSauce(req: Request, res: Response) {
+  try {
+    const { id }: { id?: string } = req.params;
+    const { userId }: { userId?: string } = req.body;
+
+    if (!userId) throw new Error("please provide the user id");
+
+    const like = await findLike(id, userId);
+
+    if (!like) throw new Error("No like found on this sauce by this user");
+
+    await deleteLike(like.id);
+    res.status(204).json();
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+}
+
+export async function dislikeSauce(req: Request, res: Response) {
+  try {
+    const { id }: { id?: string } = req.params;
+    const { userId }: { userId?: string } = req.body;
+
+    if (!userId) throw new Error("please provide the user id");
+
+    const alreadyLiked = await findLike(id, userId);
+    const alreadyDisliked = await findDislike(id, userId);
+
+    if (!alreadyLiked && !alreadyDisliked) {
+      const dislike = await createDislike(id, userId);
+      res.status(201).json(dislike);
+    } else {
+      throw new Error(
+        `the User with ID ${userId} has already liked the sauce with ID ${id}`
+      );
+    }
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+}
+
+export async function unDislikeSauce(req: Request, res: Response) {
+  try {
+    const { id }: { id?: string } = req.params;
+    const { userId }: { userId?: string } = req.body;
+
+    if (!userId) throw new Error("please provide the user id");
+
+    const dislike = await findDislike(id, userId);
+
+    if (!dislike) throw new Error("No like found on this sauce by this user");
+
+    await deleteDislike(dislike.id);
+    res.status(204).json();
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+}
