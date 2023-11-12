@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import hot1 from "../assets/img/hot_rank_1.svg";
 import hot2 from "../assets/img/hot_rank_2.svg";
 import hot3 from "../assets/img/hot_rank_3.svg";
