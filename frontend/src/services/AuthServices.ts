@@ -10,11 +10,14 @@ const register = async (
   return await response.data();
 };
 
-const login = async (payload: LoginPayload): Promise<void> => {
+const login = async (payload: LoginPayload): Promise<User | undefined> => {
   const response = await serverInstance.post("auth/login", payload);
   const user = await response.data;
   if (user.token) {
     localStorage.setItem("user", JSON.stringify(user));
+    return Promise.resolve(user);
+  } else {
+    return Promise.reject(undefined);
   }
 };
 

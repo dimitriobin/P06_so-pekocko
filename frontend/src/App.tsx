@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Register from "./views/Register";
 import AppLayout from "./components/AppLayout";
 import AuthProvider from "./components/auth/AuthProvider";
+import RequireAuth from "./components/auth/RequireAuth";
 // import Sauce from "./components/Sauce";
 
 function App() {
@@ -13,7 +14,14 @@ function App() {
       <div className="App min-h-screen flex flex-col justify-between items-center relative">
         <Routes>
           <Route path="/" element={<AppLayout />}>
-            <Route path="/sauces" element={<SaucesList />}>
+            <Route
+              path="/sauces"
+              element={
+                <RequireAuth>
+                  <SaucesList />
+                </RequireAuth>
+              }
+            >
               {/* <Route path={"/:id"} element={<Sauce />} /> */}
             </Route>
             <Route path="login" element={<Login />} />

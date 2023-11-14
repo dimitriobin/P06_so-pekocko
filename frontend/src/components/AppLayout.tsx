@@ -1,11 +1,12 @@
 import CustomNavLink from "./CustomNavLink";
 import logo from "../logo.svg";
 import { Link, Outlet } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { CiLogout } from "react-icons/ci";
+import { useAuth } from "../hooks/useAuth";
 
 function AppLayout() {
-  const { currentUser, handleLogout } = useContext(AuthContext);
+  const { currentUser, handleLogout } = useAuth();
+  console.log("layout", currentUser);
   return (
     <>
       <nav className="container relative flex items-center justify-center mb-10 lg:mb-20">
@@ -21,7 +22,7 @@ function AppLayout() {
             onClick={handleLogout}
             className="absolute top-5 md:top-10 lg:top-20 right-5 md:right-10 lg:right-20"
           >
-            <i className="fas fa-sign-out-alt fa-3x"></i>
+            <CiLogout />
           </button>
         ) : (
           <div className="absolute top-5 md:top-10 lg:top-20 right-5 md:right-10 lg:right-20">
