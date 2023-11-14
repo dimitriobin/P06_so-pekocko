@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import AuthService from "../services/AuthServices";
-import { AxiosError } from "axios";
+import AuthService from '../services/AuthServices';
+import { AxiosError } from 'axios';
 
 function Register() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [successful, setSuccessful] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const email = e.currentTarget.value;
@@ -22,7 +22,7 @@ function Register() {
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setMessage("");
+    setMessage('');
     setSuccessful(false);
 
     try {
@@ -34,8 +34,7 @@ function Register() {
       setSuccessful(true);
     } catch (error) {
       if (error instanceof AxiosError) {
-        const resMessage =
-          error?.response?.data.message || error.message || error.toString();
+        const resMessage = error?.response?.data.message || error.message || error.toString();
 
         setMessage(resMessage);
       }
@@ -47,8 +46,7 @@ function Register() {
     <>
       <form
         onSubmit={handleRegister}
-        className="flex flex-col content-center justify-center items-center"
-      >
+        className="flex flex-col content-center justify-center items-center">
         {!successful && (
           <>
             <div className="mb-2">
@@ -85,10 +83,7 @@ function Register() {
 
         {message && (
           <div className="">
-            <p
-              className={successful ? "text-green-500" : "text-red-500"}
-              role="alert"
-            >
+            <p className={successful ? 'text-green-500' : 'text-red-500'} role="alert">
               {message}
             </p>
           </div>

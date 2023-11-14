@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import authService from "../../services/AuthServices";
-import { User } from "../../types/User";
-import { AuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import authService from '../../services/AuthServices';
+import { User } from '../../types/User';
+import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User>();
@@ -16,14 +16,11 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const login = async ({
-    email,
-    password,
-  }: Record<string, string>): Promise<void> => {
+  const login = async ({ email, password }: Record<string, string>): Promise<void> => {
     try {
       const user = await authService.login({
         email,
-        password,
+        password
       });
 
       if (user) {
@@ -37,7 +34,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const handleLogout = () => {
     authService.logout();
     setCurrentUser(undefined);
-    navigate("/login");
+    navigate('/login');
   };
 
   const value = { currentUser, login, handleLogout };

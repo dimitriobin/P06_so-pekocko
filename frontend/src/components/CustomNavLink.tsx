@@ -1,5 +1,5 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 interface Props {
   to: string;
@@ -13,20 +13,19 @@ function CustomNavLink({ to, children }: Props) {
       className={({
         isActive,
         isPending,
-        isTransitioning,
+        isTransitioning
       }: {
         isActive: boolean;
         isPending: boolean;
         isTransitioning: boolean;
       }) =>
         [
-          isPending ? "pending" : "",
-          isActive ? "text-blue-600" : "",
-          isTransitioning ? "transitioning" : "",
-          "first:mr-5",
-        ].join(" ")
-      }
-    >
+          isPending ? 'pending' : '',
+          isActive ? 'text-blue-600' : '',
+          isTransitioning ? 'transitioning' : '',
+          'first:mr-5'
+        ].join(' ')
+      }>
       {children}
     </NavLink>
   );

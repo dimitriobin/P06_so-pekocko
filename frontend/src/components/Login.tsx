@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -9,14 +9,14 @@ const Login = () => {
   const location = useLocation();
   const auth = useAuth();
 
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || '/';
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
     setLoading(true);
 
     await auth.login({ email, password });
@@ -27,8 +27,7 @@ const Login = () => {
     <>
       <form
         onSubmit={handleLogin}
-        className="flex flex-col content-center justify-center items-center"
-      >
+        className="flex flex-col content-center justify-center items-center">
         <div className="mb-2">
           <label htmlFor="email" className="font-medium mb-1">
             Email

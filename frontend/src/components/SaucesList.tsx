@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import SaucesDataService from "../services/SaucesServices";
+import { useState, useEffect } from 'react';
+import SaucesDataService from '../services/SaucesServices';
 
-import SauceCard from "./SauceCard";
+import SauceCard from './SauceCard';
 // import AddSauce from "./AddSauce";
-import { Sauce } from "../types/Sauce";
+import { Sauce } from '../types/Sauce';
 
 function SaucesList() {
   //   const [sauceFormActive, setsauceFormActive] = useState(false);
@@ -14,7 +14,7 @@ function SaucesList() {
   }, []);
 
   const handleClick = () => {
-    console.log("set sauce form to active");
+    console.log('set sauce form to active');
     // setsauceFormActive(true);
   };
 
@@ -42,10 +42,7 @@ function SaucesList() {
 
   return (
     <>
-      <button
-        onClick={handleClick}
-        className="underline mb-8 mx-auto block text-xl"
-      >
+      <button onClick={handleClick} className="underline mb-8 mx-auto block text-xl">
         Add a new sauce
       </button>
       {/* {sauceFormActive && (
@@ -55,8 +52,7 @@ function SaucesList() {
         />
       )} */}
       <div className="grid grid-cols-auto-fill xl:grid-cols-4 gap-10 content-center justify-center">
-        {sauces &&
-          sauces.map((sauce, index) => <SauceCard sauce={sauce} key={index} />)}
+        {sauces && sauces.map((sauce, index) => <SauceCard sauce={sauce} key={index} />)}
       </div>
     </>
   );

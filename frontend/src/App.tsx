@@ -1,11 +1,11 @@
-import { Route, Routes } from "react-router-dom";
-import "./App.css";
-import SaucesList from "./components/SaucesList";
-import Login from "./components/Login";
-import Register from "./views/Register";
-import AppLayout from "./components/AppLayout";
-import AuthProvider from "./components/auth/AuthProvider";
-import RequireAuth from "./components/auth/RequireAuth";
+import { Route, Routes } from 'react-router-dom';
+import './App.css';
+import SaucesList from './components/SaucesList';
+import Login from './components/Login';
+import Register from './views/Register';
+import AppLayout from './components/AppLayout';
+import AuthProvider from './components/auth/AuthProvider';
+import RequireAuth from './components/auth/RequireAuth';
 // import Sauce from "./components/Sauce";
 
 function App() {
@@ -20,8 +20,7 @@ function App() {
                 <RequireAuth>
                   <SaucesList />
                 </RequireAuth>
-              }
-            >
+              }>
               {/* <Route path={"/:id"} element={<Sauce />} /> */}
             </Route>
             <Route path="login" element={<Login />} />

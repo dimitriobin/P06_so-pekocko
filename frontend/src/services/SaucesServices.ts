@@ -1,20 +1,17 @@
-import { AxiosError } from "axios";
-import { serverInstance } from "../http-common";
-import { CreateSaucePayload, Sauce } from "../types/Sauce";
-import { authHeader } from "./auth-header";
-import AuthService from "./AuthServices";
+import { AxiosError } from 'axios';
+import { serverInstance } from '../http-common';
+import { CreateSaucePayload, Sauce } from '../types/Sauce';
+import { authHeader } from './auth-header';
+import AuthService from './AuthServices';
 
 const getAll = () => {
   return serverInstance
-    .get("/sauces", { headers: authHeader() })
+    .get('/sauces', { headers: authHeader() })
     .then((response) => {
       return Promise.resolve(response);
     })
     .catch((error) => {
-      if (
-        error.response.status === 401 &&
-        error.response.data === "Please login"
-      ) {
+      if (error.response.status === 401 && error.response.data === 'Please login') {
         AuthService.logout();
       } else {
         return Promise.reject(error);
@@ -24,14 +21,14 @@ const getAll = () => {
 
 const createOne = async (payload: CreateSaucePayload) => {
   try {
-    const response = await serverInstance.post("/sauces", payload, {
-      headers: authHeader(),
+    const response = await serverInstance.post('/sauces', payload, {
+      headers: authHeader()
     });
     return await response.data();
   } catch (error) {
     if (
       (error as AxiosError).response?.status === 401 &&
-      (error as AxiosError).response?.data === "Please login"
+      (error as AxiosError).response?.data === 'Please login'
     ) {
       AuthService.logout();
     } else {
@@ -43,13 +40,13 @@ const createOne = async (payload: CreateSaucePayload) => {
 const getOne = async (id: string | number) => {
   try {
     const response = await serverInstance.get(`/sauces/${id}`, {
-      headers: authHeader(),
+      headers: authHeader()
     });
     return await response.data();
   } catch (error) {
     if (
       (error as AxiosError).response?.status === 401 &&
-      (error as AxiosError).response?.data === "Please login"
+      (error as AxiosError).response?.data === 'Please login'
     ) {
       AuthService.logout();
     } else {
@@ -61,13 +58,13 @@ const getOne = async (id: string | number) => {
 const updateOne = async (id: string | number, data: Sauce) => {
   try {
     const response = await serverInstance.put(`/sauces/${id}`, data, {
-      headers: authHeader(),
+      headers: authHeader()
     });
     return await response.data();
   } catch (error) {
     if (
       (error as AxiosError).response?.status === 401 &&
-      (error as AxiosError).response?.data === "Please login"
+      (error as AxiosError).response?.data === 'Please login'
     ) {
       AuthService.logout();
     } else {
@@ -79,13 +76,13 @@ const updateOne = async (id: string | number, data: Sauce) => {
 const deleteOne = async (id: string | number) => {
   try {
     const response = await serverInstance.delete(`/sauces/${id}`, {
-      headers: authHeader(),
+      headers: authHeader()
     });
     return await response.data();
   } catch (error) {
     if (
       (error as AxiosError).response?.status === 401 &&
-      (error as AxiosError).response?.data === "Please login"
+      (error as AxiosError).response?.data === 'Please login'
     ) {
       AuthService.logout();
     } else {
@@ -97,13 +94,13 @@ const deleteOne = async (id: string | number) => {
 const likeOne = async (id: string | number, data: unknown) => {
   try {
     const response = await serverInstance.post(`/sauces/${id}/like`, data, {
-      headers: authHeader(),
+      headers: authHeader()
     });
     return await response.data();
   } catch (error) {
     if (
       (error as AxiosError).response?.status === 401 &&
-      (error as AxiosError).response?.data === "Please login"
+      (error as AxiosError).response?.data === 'Please login'
     ) {
       AuthService.logout();
     } else {
@@ -118,7 +115,7 @@ const sauceService = {
   getOne,
   updateOne,
   deleteOne,
-  likeOne,
+  likeOne
 };
 
 export default sauceService;
