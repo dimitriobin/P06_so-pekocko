@@ -1,3 +1,4 @@
+/*eslint-env node*/
 /** @type {import('tailwindcss').Config} */
 export default {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
@@ -19,8 +20,12 @@ export default {
       display: ['hover', 'focus']
     }
   },
-  plugins: [import('daisyui')],
+  plugins: [require('daisyui')],
   corePlugins: {
     preflight: true
+  },
+  daisyui: {
+    themes: ['cupcake', 'dark'],
+    darkTheme: 'dark'
   }
 };

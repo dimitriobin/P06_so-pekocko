@@ -3,10 +3,10 @@ import logo from '../logo.svg';
 import { Link, Outlet } from 'react-router-dom';
 import { CiLogout } from 'react-icons/ci';
 import { useAuth } from '../hooks/useAuth';
+import SwitchThemeController from './SwitchThemeController';
 
 function AppLayout() {
   const { currentUser, handleLogout } = useAuth();
-  console.log('layout', currentUser);
   return (
     <>
       <nav className="container relative flex items-center justify-center mb-10 lg:mb-20">
@@ -25,6 +25,7 @@ function AppLayout() {
             <CustomNavLink to={'/login'}>Login</CustomNavLink>
           </div>
         )}
+        <SwitchThemeController />
       </nav>
 
       <Outlet />
