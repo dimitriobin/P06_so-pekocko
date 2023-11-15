@@ -25,31 +25,34 @@ const Login = () => {
 
   return (
     <>
-      <form
-        onSubmit={handleLogin}
-        className="flex flex-col content-center justify-center items-center">
-        <div className="form-control">
+      <form onSubmit={handleLogin} className="flex flex-col justify-center items-center">
+        <div className="form-control w-full max-w-xs mb-2">
           <label htmlFor="email" className="label">
-            Email
-          </label>
-          <input type="text" className="input input-bordered" name="email" />
-        </div>
-
-        <div className="mb-2 flex flex-col">
-          <label htmlFor="password" className="font-medium mb-1">
-            Password
+            <span className="label-text">Email</span>
           </label>
           <input
-            type="password"
-            className="border-2 border-black rounded px-3 py-2 text-xl mb-4 focus:ring focus:ring-yellow-600 focus:ring-offset-4 focus:ring-offset-white  transition-all"
-            name="password"
+            id="email"
+            type="text"
+            name="email"
+            className="input input-bordered w-full max-w-xs"
           />
         </div>
-        <button className="btn">Button</button>
 
-        <button className="bg-green-500 hover:bg-green-900 focus:bg-green-900 active:bg-green-900 rounded-full p-3 w-5/12 uppercase font-bold text-white text-xl focus:outline-none transition-all">
-          {loading && <i className="fas fa-spinner animate-spin"></i>}
-          Log in
+        <div className="form-control w-full max-w-xs mb-8">
+          <label htmlFor="password" className="label">
+            <span className="label-text">Password</span>
+          </label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            className="input input-bordered w-full max-w-xs"
+          />
+        </div>
+
+        <button type="submit" className="btn btn-wide btn-success text-white">
+          {loading && <span className="loading loading-spinner"></span>}
+          Log In
         </button>
       </form>
     </>

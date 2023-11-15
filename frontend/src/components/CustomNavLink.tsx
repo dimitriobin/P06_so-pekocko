@@ -4,9 +4,10 @@ import { NavLink } from 'react-router-dom';
 interface Props {
   to: string;
   children: React.ReactNode;
+  className?: string;
 }
 
-function CustomNavLink({ to, children }: Props) {
+function CustomNavLink({ to, children, className }: Props) {
   return (
     <NavLink
       to={to}
@@ -23,7 +24,8 @@ function CustomNavLink({ to, children }: Props) {
           isPending ? 'pending' : '',
           isActive ? 'text-blue-600' : '',
           isTransitioning ? 'transitioning' : '',
-          'first:mr-5'
+          'first:mr-5',
+          className
         ].join(' ')
       }>
       {children}
