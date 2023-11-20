@@ -2,7 +2,6 @@ import { AxiosError } from 'axios';
 import { serverInstance } from '../http-common';
 import { CreateSaucePayload, Sauce } from '../types/Sauce';
 import { authHeader } from './auth-header';
-import AuthService from './AuthServices';
 
 const getAll = () => {
   return serverInstance
@@ -12,7 +11,7 @@ const getAll = () => {
     })
     .catch((error) => {
       if (error.response.status === 401 && error.response.data === 'Please login') {
-        AuthService.logout();
+        // logout();
       } else {
         return Promise.reject(error);
       }
@@ -30,7 +29,7 @@ const createOne = async (payload: CreateSaucePayload) => {
       (error as AxiosError).response?.status === 401 &&
       (error as AxiosError).response?.data === 'Please login'
     ) {
-      AuthService.logout();
+      //   AuthService.logout();
     } else {
       console.error(error);
     }
@@ -48,7 +47,7 @@ const getOne = async (id: string | number) => {
       (error as AxiosError).response?.status === 401 &&
       (error as AxiosError).response?.data === 'Please login'
     ) {
-      AuthService.logout();
+      //   AuthService.logout();
     } else {
       console.error(error);
     }
@@ -66,7 +65,7 @@ const updateOne = async (id: string | number, data: Sauce) => {
       (error as AxiosError).response?.status === 401 &&
       (error as AxiosError).response?.data === 'Please login'
     ) {
-      AuthService.logout();
+      //   AuthService.logout();
     } else {
       console.error(error);
     }
@@ -84,7 +83,7 @@ const deleteOne = async (id: string | number) => {
       (error as AxiosError).response?.status === 401 &&
       (error as AxiosError).response?.data === 'Please login'
     ) {
-      AuthService.logout();
+      //   AuthService.logout();
     } else {
       console.error(error);
     }
@@ -102,7 +101,7 @@ const likeOne = async (id: string | number, data: unknown) => {
       (error as AxiosError).response?.status === 401 &&
       (error as AxiosError).response?.data === 'Please login'
     ) {
-      AuthService.logout();
+      //   AuthService.logout();
     } else {
       console.error(error);
     }

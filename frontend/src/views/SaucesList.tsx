@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import SaucesDataService from '../services/SaucesServices';
+import SaucesDataService from '../utils/SaucesServices';
 
-import SauceCard from './SauceCard';
+import SauceCard from '../components/SauceCard';
 // import AddSauce from "./AddSauce";
 import { Sauce } from '../types/Sauce';
 
