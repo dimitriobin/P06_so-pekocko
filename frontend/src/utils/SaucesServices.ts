@@ -3,37 +3,16 @@ import { serverInstance } from '../http-common';
 import { CreateSaucePayload, Sauce } from '../types/Sauce';
 import { authHeader } from './auth-header';
 
-const getAll = () => {
-  return serverInstance
-    .get('/sauces', { headers: authHeader() })
-    .then((response) => {
-      return Promise.resolve(response);
-    })
-    .catch((error) => {
-      if (error.response.status === 401 && error.response.data === 'Please login') {
-        // logout();
-      } else {
-        return Promise.reject(error);
-      }
-    });
+export const getAll = async (): Promise<Sauce[]> => {
+  const response = await serverInstance.get<Sauce[]>('/sauces', { headers: authHeader() });
+  return response.data;
 };
 
-const createOne = async (payload: CreateSaucePayload) => {
-  try {
-    const response = await serverInstance.post('/sauces', payload, {
-      headers: authHeader()
-    });
-    return await response.data();
-  } catch (error) {
-    if (
-      (error as AxiosError).response?.status === 401 &&
-      (error as AxiosError).response?.data === 'Please login'
-    ) {
-      //   AuthService.logout();
-    } else {
-      console.error(error);
-    }
-  }
+const createOne = async (payload: CreateSaucePayload): Promise<Sauce> => {
+  const response = await serverInstance.post<Sauce>('/sauces', payload, {
+    headers: authHeader()
+  });
+  return response.data;
 };
 
 const getOne = async (id: string | number) => {

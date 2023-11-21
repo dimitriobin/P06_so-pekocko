@@ -1,3 +1,25 @@
-export interface CreateSaucePayload {}
+import { AddSauceSchema } from '../utils/formValidation';
 
-export interface Sauce {}
+export interface CreateSaucePayload extends AddSauceSchema {
+  userId: number;
+  imageUrl: string;
+}
+
+export interface Sauce {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  userId: number;
+  name: string;
+  manufacturer: string;
+  description: string;
+  mainPepper: string;
+  imageUrl: string;
+  heat: number;
+  likes: string[];
+  dislikes: string[];
+  _count: {
+    likes: number;
+    dislikes: number;
+  };
+}

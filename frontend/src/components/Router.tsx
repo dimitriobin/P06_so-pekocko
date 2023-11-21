@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import AppLayout from './AppLayout';
 import RequireAuth from './auth/RequireAuth';
-import SaucesList from '../views/SaucesList';
+import SaucesList from '../views/Sauces';
 import Login from '../views/Login';
 import Register from '../views/Register';
 

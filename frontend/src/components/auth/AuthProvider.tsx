@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { AuthenticatedUser, User } from '../../types/User';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -12,13 +12,13 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   );
   const navigate = useNavigate();
 
-  const register = async (payload: RegisterPayload): Promise<User> => {
+  const register = useCallback(async (payload: RegisterPayload): Promise<User> => {
     const response = await serverInstance.post<User>('auth/register', payload);
     const user = response.data;
     return user;
-  };
+  }, []);
 
-  const login = async ({ email, password }: LoginPayload): Promise<User> => {
+  const login = useCallback(async ({ email, password }: LoginPayload): Promise<User> => {
     const { data } = await serverInstance.post<AuthenticatedUser>('auth/login', {
       email,
       password
@@ -29,15 +29,18 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     setCurrentUser(authenticatedUser.user);
     return authenticatedUser.user;
-  };
+  }, []);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     localStorage.removeItem('user');
     setCurrentUser(undefined);
     navigate('/login');
-  };
+  }, []);
 
-  const value = { currentUser, register, login, handleLogout };
+  const value = useMemo(
+    () => ({ currentUser, register, login, handleLogout }),
+    [currentUser, login, register, handleLogout]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

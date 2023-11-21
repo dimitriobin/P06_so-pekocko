@@ -6,7 +6,9 @@ function AppLayout() {
     <>
       <Header />
 
-      <Outlet />
+      <main className="flex-grow w-full px-[5vw]">
+        <Outlet />
+      </main>
 
       <footer className="footer footer-center p-4 bg-base-300 text-base-content">
         <aside>

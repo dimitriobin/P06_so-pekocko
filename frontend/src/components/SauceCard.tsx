@@ -6,8 +6,9 @@ import hot3 from '../assets/img/hot_rank_3.svg';
 import hot4 from '../assets/img/hot_rank_4.svg';
 import hot5 from '../assets/img/hot_rank_5.svg';
 import { Link } from 'react-router-dom';
+import { Sauce } from '../types/Sauce';
 
-const imageObject = {
+const imageObject: Record<string, string> = {
   hot1,
   hot2,
   hot3,
@@ -15,23 +16,26 @@ const imageObject = {
   hot5
 };
 
-function SauceCard({ sauce }) {
+function SauceCard({ sauce }: { sauce: Sauce }) {
   return (
-    <Link to={`/sauce/${sauce._id}`}>
-      <article className="sauce-card relative overflow-hidden border rounded-3xl h-96 shadow-lg cursor-pointer">
-        <img src={sauce.imageUrl} alt={sauce.description} className="w-full h-auto"></img>
-        <div className="p-5 absolute bottom-0 bg-white h-2/5 w-full flex flex-col justify-center items-center text-center">
+    <article className="card shadow-lg relative">
+      <figure>
+        <img src={sauce.imageUrl} alt={sauce.description} className="w-full aspect-video" />
+      </figure>
+      <div className="card-body indicator w-full">
+        <span className="indicator-item right-[50%] translate-x-[50%]">
           <img
             src={imageObject[`hot${sauce.heat}`]}
             alt={`Cette sauce a obtenu la note de ${sauce.heat} sur 5`}
-            className="inline h-20 w-20 p-2 rounded-full bg-white border shadow-lg absolute"></img>
-          <h2 className="text-lg font-semibold uppercase truncate w-full" title="full text">
-            {sauce.name}
-          </h2>
-          <p className="italic">by {sauce.manufacturer}</p>
-        </div>
-      </article>
-    </Link>
+            className="h-10 w-10 p-1 rounded-full bg-white shadow-lg"></img>
+        </span>
+        <h2 className="card-title">{sauce.name}</h2>
+        <p className="italic">by {sauce.manufacturer}</p>
+
+        <div className="card-actions justify-end"></div>
+      </div>
+      <Link to={`/sauce/${sauce.id}`} className="absolute left-0 top-0 w-full h-full" />
+    </article>
   );
 }
 
