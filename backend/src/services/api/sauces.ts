@@ -55,6 +55,9 @@ export async function readSauces() {
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 }
 
