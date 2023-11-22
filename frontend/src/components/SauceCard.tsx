@@ -17,6 +17,7 @@ const imageObject: Record<string, string> = {
 };
 
 function SauceCard({ sauce }: { sauce: Sauce }) {
+  console.log('sauce card rendered');
   return (
     <article className="card shadow-lg relative">
       <figure>
