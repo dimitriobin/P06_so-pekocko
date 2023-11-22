@@ -8,29 +8,18 @@ export const getAll = async (): Promise<Sauce[]> => {
   return response.data;
 };
 
-const createOne = async (payload: CreateSaucePayload): Promise<Sauce> => {
+export const createOne = async (payload: CreateSaucePayload): Promise<Sauce> => {
   const response = await serverInstance.post<Sauce>('/sauces', payload, {
     headers: authHeader()
   });
   return response.data;
 };
 
-const getOne = async (id: string | number) => {
-  try {
-    const response = await serverInstance.get(`/sauces/${id}`, {
-      headers: authHeader()
-    });
-    return await response.data();
-  } catch (error) {
-    if (
-      (error as AxiosError).response?.status === 401 &&
-      (error as AxiosError).response?.data === 'Please login'
-    ) {
-      //   AuthService.logout();
-    } else {
-      console.error(error);
-    }
-  }
+export const getOne = async (id: string | number) => {
+  const response = await serverInstance.get<Sauce>(`/sauces/${id}`, {
+    headers: authHeader()
+  });
+  return await response.data;
 };
 
 const updateOne = async (id: string | number, data: Sauce) => {

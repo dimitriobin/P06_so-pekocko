@@ -17,11 +17,14 @@ const imageObject: Record<string, string> = {
 };
 
 function SauceCard({ sauce }: { sauce: Sauce }) {
-  console.log('sauce card rendered');
   return (
     <article className="card shadow-lg relative">
       <figure>
-        <img src={sauce.imageUrl} alt={sauce.description} className="w-full aspect-video" />
+        <img
+          src={`https://picsum.photos/600/400?random=${sauce.id}`}
+          alt={sauce.description}
+          className="w-full aspect-video object-cover"
+        />
       </figure>
       <div className="card-body indicator w-full">
         <span className="indicator-item right-[50%] translate-x-[50%]">
@@ -35,7 +38,7 @@ function SauceCard({ sauce }: { sauce: Sauce }) {
 
         <div className="card-actions justify-end"></div>
       </div>
-      <Link to={`/sauce/${sauce.id}`} className="absolute left-0 top-0 w-full h-full" />
+      <Link to={`/sauces/${sauce.id}`} className="absolute left-0 top-0 w-full h-full" />
     </article>
   );
 }

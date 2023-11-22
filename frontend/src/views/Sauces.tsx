@@ -4,6 +4,7 @@ import { Sauce } from '../types/Sauce';
 
 import SauceCard from '../components/SauceCard';
 import { AddSauceSection } from '../components/AddSauceSection';
+import { Outlet } from 'react-router-dom';
 
 function SaucesList() {
   const [sauces, setSauces] = useState<Sauce[]>([]);
@@ -24,6 +25,7 @@ function SaucesList() {
   return (
     <>
       <AddSauceSection handleNewSauce={(newSauce) => setSauces([newSauce, ...sauces])} />
+      <Outlet />
       <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
         {sauces && sauces.map((sauce, index) => <SauceCard sauce={sauce} key={index} />)}
       </div>

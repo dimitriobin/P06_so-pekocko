@@ -4,6 +4,7 @@ import RequireAuth from './auth/RequireAuth';
 import SaucesList from '../views/Sauces';
 import Login from '../views/Login';
 import Register from '../views/Register';
+import Sauce from '../views/Sauce';
 
 export function Router() {
   return (
@@ -15,9 +16,16 @@ export function Router() {
             <RequireAuth>
               <SaucesList />
             </RequireAuth>
-          }>
-          {/* <Route path={"/:id"} element={<Sauce />} /> */}
-        </Route>
+          }
+        />
+        <Route
+          path={'sauces/:id'}
+          element={
+            <RequireAuth>
+              <Sauce />
+            </RequireAuth>
+          }
+        />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Register />} />
       </Route>
