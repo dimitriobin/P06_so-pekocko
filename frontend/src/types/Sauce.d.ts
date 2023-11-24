@@ -16,8 +16,8 @@ export interface Sauce {
   mainPepper: string;
   imageUrl: string;
   heat: number;
-  likes: string[];
-  dislikes: string[];
+  likes: { user: { id: number; name: string } }[];
+  dislikes: { user: { id: number; name: string } }[];
   _count: {
     likes: number;
     dislikes: number;

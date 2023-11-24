@@ -40,6 +40,7 @@ export async function readSauces() {
         select: {
           user: {
             select: {
+              id: true,
               name: true,
             },
           },
@@ -49,6 +50,7 @@ export async function readSauces() {
         select: {
           user: {
             select: {
+              id: true,
               name: true,
             },
           },

@@ -58,22 +58,80 @@ const deleteOne = async (id: string | number) => {
   }
 };
 
-const likeOne = async (id: string | number, data: unknown) => {
-  try {
-    const response = await serverInstance.post(`/sauces/${id}/like`, data, {
+const likeOne = async ({
+  sauceId,
+  userId
+}: {
+  sauceId: string | number;
+  userId: string | number;
+}) => {
+  const response = await serverInstance.post(
+    `/sauces/${sauceId}/like`,
+    {
+      userId
+    },
+    {
       headers: authHeader()
-    });
-    return await response.data();
-  } catch (error) {
-    if (
-      (error as AxiosError).response?.status === 401 &&
-      (error as AxiosError).response?.data === 'Please login'
-    ) {
-      //   AuthService.logout();
-    } else {
-      console.error(error);
     }
-  }
+  );
+  return await response.data;
+};
+
+const dislikeOne = async ({
+  sauceId,
+  userId
+}: {
+  sauceId: string | number;
+  userId: string | number;
+}) => {
+  const response = await serverInstance.post(
+    `/sauces/${sauceId}/dislike`,
+    {
+      userId
+    },
+    {
+      headers: authHeader()
+    }
+  );
+  return await response.data;
+};
+
+const unLikeOne = async ({
+  sauceId,
+  userId
+}: {
+  sauceId: string | number;
+  userId: string | number;
+}) => {
+  const response = await serverInstance.post(
+    `/sauces/${sauceId}/unlike`,
+    {
+      userId
+    },
+    {
+      headers: authHeader()
+    }
+  );
+  return await response.data;
+};
+
+const unDislikeOne = async ({
+  sauceId,
+  userId
+}: {
+  sauceId: string | number;
+  userId: string | number;
+}) => {
+  const response = await serverInstance.post(
+    `/sauces/${sauceId}/undislike`,
+    {
+      userId
+    },
+    {
+      headers: authHeader()
+    }
+  );
+  return await response.data;
 };
 
 const sauceService = {
@@ -82,7 +140,10 @@ const sauceService = {
   getOne,
   updateOne,
   deleteOne,
-  likeOne
+  likeOne,
+  unLikeOne,
+  dislikeOne,
+  unDislikeOne
 };
 
 export default sauceService;

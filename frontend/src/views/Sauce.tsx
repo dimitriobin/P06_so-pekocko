@@ -12,10 +12,11 @@ import { Sauce as ISauce } from '../types/Sauce';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { RiArrowGoBackFill } from 'react-icons/ri';
+import { isAxiosError } from 'axios';
 
 // import AddSauce from "./AddSauce";
 
-const imageObject = {
+const imageObject: Record<string, string> = {
   hot1,
   hot2,
   hot3,
@@ -46,7 +47,7 @@ function Sauce() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { currentUser } = useAuth();
+  const { currentUser, handleLogout } = useAuth();
 
   const [sauce, setSauce] = useState(initSauce);
   //   const [edit, setEdit] = useState(false);
@@ -57,6 +58,9 @@ function Sauce() {
       const sauce = await getOne(id as string);
       setSauce(sauce);
     } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 401) {
+        handleLogout();
+      }
       console.error(error);
     }
   };
@@ -68,6 +72,11 @@ function Sauce() {
       getSauce();
     }
   }, []);
+
+  const heatImage = () => {
+    const k = `hot${sauce.heat}`;
+    return imageObject[k];
+  };
 
   //   const onEditChange = () => {
   //     setEdit(!edit);
@@ -121,7 +130,7 @@ function Sauce() {
   return (
     <section className="flex flex-col lg:flex-row justify-center lg:justify-center items-center px-10">
       {/* {deleted && <Navigate to="/" replace={true} />} */}
-      <Link to={'/sauces'}>
+      <Link to={'/'}>
         <RiArrowGoBackFill />
       </Link>
       {/* {edit && <AddSauce value={sauce} showSauceForm={onEditChange} onDataSubmit={updateSauce} />} */}
@@ -132,7 +141,7 @@ function Sauce() {
           alt={sauce.description}
           className="w-full max-w-lg rounded-3xl h-auto"></img>
         <img
-          src={imageObject[`hot${sauce.heat}`]}
+          src={heatImage()}
           alt={`Cette sauce a obtenu la note de ${sauce.heat} sur 5`}
           className="h-20 w-20 p-2 rounded-full bg-white border shadow-lg absolute bottom-0 right-0 transform translate-x-1/3 translate-y-1/3"></img>
       </div>
