@@ -10,13 +10,22 @@ interface Props {
 
 export function AddSauceSection({ handleNewSauce }: Props) {
   const [sauceFormActive, setsauceFormActive] = useState(false);
+
   const handleSubmit = async (newSauceData: CreateSaucePayload) => {
     try {
+      const formdata = new FormData();
+      Object.entries(newSauceData).forEach(([k, v]) => {
+        if (k === 'imageUrl') {
+          formdata.append('imageUrl', v as File);
+        }
+        formdata.append(k, v.toString());
+      });
       const newSauce = await SaucesDataService.createOne(newSauceData);
       handleNewSauce(newSauce);
-      setsauceFormActive(false);
     } catch (error) {
       console.error(error);
+    } finally {
+      setsauceFormActive(false);
     }
   };
   return (

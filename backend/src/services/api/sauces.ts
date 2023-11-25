@@ -24,6 +24,34 @@ export async function createSauce({
         },
       },
     },
+    include: {
+      _count: {
+        select: {
+          likes: true,
+          dislikes: true,
+        },
+      },
+      likes: {
+        select: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+      dislikes: {
+        select: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
 }
 

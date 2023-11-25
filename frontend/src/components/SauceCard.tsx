@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
 import hot1 from '../assets/img/hot_rank_1.svg';
 import hot2 from '../assets/img/hot_rank_2.svg';
 import hot3 from '../assets/img/hot_rank_3.svg';
@@ -35,13 +33,17 @@ function SauceCard({
 
   return (
     <article className="card shadow-lg relative">
-      <figure>
-        <img
-          src={`https://picsum.photos/600/400?random=${sauce.id}`}
-          alt={sauce.description}
-          className="w-full aspect-video object-cover"
-        />
-      </figure>
+      {!sauce.imageUrl ? (
+        <div className="skeleton w-full aspect-video "></div>
+      ) : (
+        <figure>
+          <img
+            src={'http://localhost:3000/' + sauce.imageUrl}
+            alt=""
+            className="w-full aspect-video object-cover"
+          />
+        </figure>
+      )}
       <div className="card-body indicator w-full">
         <span className="indicator-item right-[50%] translate-x-[50%]">
           <img
@@ -56,16 +58,14 @@ function SauceCard({
           <div className="indicator">
             <span className="indicator-item">
               <div
-                className={sauce._count.likes > 0 && 'tooltip'}
+                className={sauce._count.likes > 0 ? 'tooltip' : ''}
                 data-tip={sauce.likes.map((i) => i.user.name).join(', ')}>
                 <span className="badge badge-accent">{sauce._count.likes}</span>
               </div>
             </span>
             <button
               onClick={handleLike}
-              className={`btn btn-circle btn-ghost ${
-                isAlreadyLiked && ''
-              } z-50 hover:bg-transparent`}>
+              className="btn btn-circle btn-ghost z-50 hover:bg-transparent">
               {isAlreadyLiked ? (
                 <FaThumbsUp className="w-10 h-10" color="#65C3C8" />
               ) : (
@@ -76,16 +76,14 @@ function SauceCard({
           <div className="indicator">
             <span className="indicator-item">
               <div
-                className={sauce._count.dislikes > 0 && 'tooltip'}
+                className={sauce._count.dislikes > 0 ? 'tooltip' : ''}
                 data-tip={sauce.dislikes.map((i) => i.user.name).join(', ')}>
                 <span className="badge badge-accent">{sauce._count.dislikes}</span>
               </div>
             </span>
             <button
               onClick={handleDislike}
-              className={`btn btn-circle btn-ghost ${
-                isAlreadyDisliked && ''
-              } z-50 hover:bg-transparent`}>
+              className="btn btn-circle btn-ghost z-50 hover:bg-transparent">
               {isAlreadyDisliked ? (
                 <FaThumbsDown className="w-10 h-10" color="#65C3C8" />
               ) : (

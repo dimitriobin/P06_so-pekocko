@@ -11,14 +11,13 @@ import {
   dislikeSauce,
   unDislikeSauce,
 } from "../controllers/sauces";
+import uploadFile from "../middlewares/uploadFile";
 const router = Router();
-// const uploadImage = require("../middleware/multer-config");
-// const { sauceInputValidation } = require("../middleware/inputValidation");
 
 router.get("/", AuthMiddleware, readAllSauces);
 router.get("/:id", AuthMiddleware, readOneSauce);
-router.post("/", AuthMiddleware, createOneSauce);
-router.patch("/:id", AuthMiddleware, updateOneSauce);
+router.post("/", AuthMiddleware, uploadFile, createOneSauce);
+router.patch("/:id", AuthMiddleware, uploadFile, updateOneSauce);
 router.delete("/:id", AuthMiddleware, deleteOneSauce);
 router.post("/:id/like", AuthMiddleware, likeSauce);
 router.post("/:id/unlike", AuthMiddleware, unLikeSauce);

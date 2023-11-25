@@ -16,10 +16,10 @@ model Sauce {
   manufacturer String
   description  String
   mainPepper   String
-  imageUrl     String
+  imageUrl     String?
   heat         Int
   likes        Likes[] 
-  dislikes      Dislikes[]     
+  dislikes     Dislikes[]     
   user         User     @relation(fields: [userId], references: [id])
 }
 

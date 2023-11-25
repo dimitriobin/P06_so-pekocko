@@ -8,6 +8,8 @@ const app: Express = express();
 app.use(express.json());
 app.use(cors());
 
+app.use(express.static("uploaded_images"));
+
 app.use("/api/sauces", sauceRouter);
 app.use("/api/auth", userRouter);
 

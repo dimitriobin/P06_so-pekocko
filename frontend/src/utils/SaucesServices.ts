@@ -10,7 +10,7 @@ export const getAll = async (): Promise<Sauce[]> => {
 
 export const createOne = async (payload: CreateSaucePayload): Promise<Sauce> => {
   const response = await serverInstance.post<Sauce>('/sauces', payload, {
-    headers: authHeader()
+    headers: { ...authHeader(), 'Content-Type': 'multipart/form-data' }
   });
   return response.data;
 };

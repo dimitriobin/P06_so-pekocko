@@ -17,7 +17,12 @@ import {
 
 export async function createOneSauce(req: Request, res: Response) {
   try {
-    const sauce = await createSauce(req.body);
+    const sauce = await createSauce({
+      ...req.body,
+      heat: Number(req.body.heat),
+      userId: Number(req.body.userId),
+      imageUrl: req.file ? req.file.filename : null,
+    });
     res.status(201).json(sauce);
   } catch (error) {
     res.status(400).json({ error });
@@ -46,7 +51,6 @@ export async function readOneSauce(req: Request, res: Response) {
 export async function updateOneSauce(req: Request, res: Response) {
   try {
     const { id }: { id?: string } = req.params;
-
     const sauce = await updateSauce(req.body, id);
     res.status(200).json(sauce);
   } catch (error) {
