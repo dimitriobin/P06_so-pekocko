@@ -41,21 +41,10 @@ const updateOne = async (id: string | number, data: Sauce) => {
 };
 
 const deleteOne = async (id: string | number) => {
-  try {
-    const response = await serverInstance.delete(`/sauces/${id}`, {
-      headers: authHeader()
-    });
-    return await response.data();
-  } catch (error) {
-    if (
-      (error as AxiosError).response?.status === 401 &&
-      (error as AxiosError).response?.data === 'Please login'
-    ) {
-      //   AuthService.logout();
-    } else {
-      console.error(error);
-    }
-  }
+  const response = await serverInstance.delete(`/sauces/${id}`, {
+    headers: authHeader()
+  });
+  return await response.data;
 };
 
 const likeOne = async ({

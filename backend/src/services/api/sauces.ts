@@ -158,11 +158,23 @@ export async function updateSauce(
 }
 
 export async function deleteSauce(id: string) {
-  return await prisma.sauce.delete({
+  const sauceId = Number(id);
+  const deleteLikes = await prisma.likes.deleteMany({
     where: {
-      id: Number(id),
+      sauceId,
     },
   });
+  const deleteDislikes = await prisma.dislikes.deleteMany({
+    where: {
+      sauceId,
+    },
+  });
+  const deleteSauce = await prisma.sauce.delete({
+    where: {
+      id: sauceId,
+    },
+  });
+  return Promise.all([deleteLikes, deleteDislikes, deleteSauce]);
 }
 
 export async function anonymizeSauceUser(userId: string) {

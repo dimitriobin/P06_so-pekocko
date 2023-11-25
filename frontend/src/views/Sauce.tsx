@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { RiArrowGoBackFill } from 'react-icons/ri';
 import { isAxiosError } from 'axios';
+import sauceService from '../utils/SaucesServices';
 
 // import AddSauce from "./AddSauce";
 
@@ -51,7 +52,14 @@ function Sauce() {
 
   const [sauce, setSauce] = useState(initSauce);
   //   const [edit, setEdit] = useState(false);
-  //   const [deleted, setDeleted] = useState(false);
+
+  useEffect(() => {
+    if (!currentUser?.id) {
+      navigate('/');
+    } else {
+      getSauce();
+    }
+  }, []);
 
   const getSauce = async () => {
     try {
@@ -64,14 +72,6 @@ function Sauce() {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    if (!id) {
-      navigate('/sauces');
-    } else {
-      getSauce();
-    }
-  }, []);
 
   const heatImage = () => {
     const k = `hot${sauce.heat}`;
@@ -90,15 +90,14 @@ function Sauce() {
   //       .catch((error) => console.log(error));
   //   };
 
-  //   const onDelete = () => {
-  //     SauceDataService.deleteOne(props.match.params.id)
-  //       .then(() => {
-  //         setDeleted(true);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   };
+  const onDelete = async () => {
+    try {
+      const deleted = await sauceService.deleteOne(sauce.id);
+      if (deleted) navigate('/');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   //   const onLike = () => {
   //     const like = sauce.likes > 0 ? 0 : 1;
@@ -128,76 +127,43 @@ function Sauce() {
   //   };
 
   return (
-    <section className="flex flex-col lg:flex-row justify-center lg:justify-center items-center px-10">
-      {/* {deleted && <Navigate to="/" replace={true} />} */}
-      <Link to={'/'}>
-        <RiArrowGoBackFill />
+    <section className="px-10">
+      <Link to={'/'} className="btn btn-link">
+        <RiArrowGoBackFill className="w-6 h-6" />
+        Back to all
       </Link>
+      <img
+        src={'http://localhost:3000/' + sauce.imageUrl}
+        alt={sauce.description}
+        className="w-full aspect-video object-cover"></img>
+      {/* {deleted && <Navigate to="/" replace={true} />} */}
       {/* {edit && <AddSauce value={sauce} showSauceForm={onEditChange} onDataSubmit={updateSauce} />} */}
-      <div className="relative">
-        <img
-          src="https://picsum.photos/600/400"
-          //   src={sauce.imageUrl}
-          alt={sauce.description}
-          className="w-full max-w-lg rounded-3xl h-auto"></img>
+      <div className="flex justify-between items-center">
+        <div className="">
+          <h1 className="text-6xl font-bold mt-5 mb-2">{sauce.name}</h1>
+          <h2 className=" text-3xl font-medium mb-2">Made with {sauce.mainPepper}</h2>
+          <p className="italic text-xl mb-3">by {sauce.manufacturer}</p>
+          <p>{sauce.description}</p>
+          {currentUser && sauce.userId === currentUser.id && (
+            <div className="my-4">
+              <button
+                //   onClick={onEditChange}
+                className="bg-yellow-500 p-3 font-medium rounded-full shadow-lg my-2 mr-2 text-white">
+                update
+              </button>
+              <button
+                onClick={onDelete}
+                className="bg-red-500 p-3 font-medium rounded-full shadow-lg my-2 text-white">
+                delete
+              </button>
+            </div>
+          )}
+        </div>
         <img
           src={heatImage()}
           alt={`Cette sauce a obtenu la note de ${sauce.heat} sur 5`}
-          className="h-20 w-20 p-2 rounded-full bg-white border shadow-lg absolute bottom-0 right-0 transform translate-x-1/3 translate-y-1/3"></img>
-      </div>
-      <div className="w-full lg:w-1/2 text-center lg:text-left lg:ml-10">
-        <h1 className="text-6xl font-bold mt-5 mb-2">{sauce.name}</h1>
-        <h2 className=" text-3xl font-medium mb-2">Made with {sauce.mainPepper}</h2>
-        <p className="italic text-xl mb-3">by {sauce.manufacturer}</p>
-        <p>{sauce.description}</p>
-        {currentUser && sauce.userId === currentUser.id && (
-          <div className="my-4">
-            <button
-              //   onClick={onEditChange}
-              className="bg-yellow-500 p-3 font-medium rounded-full shadow-lg my-2 mr-2 text-white">
-              update
-            </button>
-            <button
-              //   onClick={onDelete}
-              className="bg-red-500 p-3 font-medium rounded-full shadow-lg my-2 text-white">
-              delete
-            </button>
-          </div>
-        )}
-        <div className="flex justify-evenly lg:justify-start items-center">
-          <button
-            // onClick={onLike}
-            name="like"
-            aria-label="Like the sauce"
-            className={sauce._count.dislikes > 0 ? 'cursor-not-allowed tooltip' : 'tooltip'}
-            disabled={sauce._count.dislikes > 0}>
-            {sauce.likes.length > 0 && (
-              <span className="tooltiptext">{sauce.likes.length} persons like this sauce</span>
-            )}
-            {sauce._count.likes > 0 ? (
-              <i className="fas fa-thumbs-up fa-4x lg:mx-5"></i>
-            ) : (
-              <i className="far fa-thumbs-up fa-4x lg:mx-5"></i>
-            )}
-          </button>
-          <button
-            // onClick={onDislike}
-            name="dislike"
-            aria-label="Dislike the sauce"
-            className={sauce._count.likes > 0 ? 'cursor-not-allowed tooltip' : 'tooltip'}
-            disabled={sauce._count.likes > 0}>
-            {sauce._count.dislikes > 0 && (
-              <span className="tooltiptext">
-                {sauce._count.dislikes} persons doesn't like this sauce
-              </span>
-            )}
-            {sauce._count.dislikes > 0 ? (
-              <i className="fas fa-thumbs-down fa-4x lg:mx-5 relative"></i>
-            ) : (
-              <i className="far fa-thumbs-down fa-4x lg:mx-5"></i>
-            )}
-          </button>
-        </div>
+          className="h-20 w-20 p-2 rounded-full bg-white border shadow-lg"
+        />
       </div>
     </section>
   );

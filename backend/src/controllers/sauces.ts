@@ -61,11 +61,10 @@ export async function updateOneSauce(req: Request, res: Response) {
 export async function deleteOneSauce(req: Request, res: Response) {
   try {
     const { id }: { id?: string } = req.params;
-
     await deleteSauce(id);
     res.status(200).json({ message: "sauce deleted" });
   } catch (error) {
-    res.status(404).json({ error: error, message: "Sauce not found" });
+    res.status(500).json({ error });
   }
 }
 
