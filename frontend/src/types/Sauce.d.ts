@@ -2,6 +2,7 @@ import { AddSauceSchema } from '../utils/formValidation';
 
 export interface CreateSaucePayload extends AddSauceSchema {
   userId: number;
+  imageUrl: File | null;
 }
 
 export interface Sauce {

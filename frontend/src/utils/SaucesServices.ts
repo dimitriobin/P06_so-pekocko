@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import { serverInstance } from '../http-common';
 import { CreateSaucePayload, Sauce } from '../types/Sauce';
 import { authHeader } from './auth-header';
@@ -22,22 +21,11 @@ export const getOne = async (id: string | number) => {
   return await response.data;
 };
 
-const updateOne = async (id: string | number, data: Sauce) => {
-  try {
-    const response = await serverInstance.put(`/sauces/${id}`, data, {
-      headers: authHeader()
-    });
-    return await response.data();
-  } catch (error) {
-    if (
-      (error as AxiosError).response?.status === 401 &&
-      (error as AxiosError).response?.data === 'Please login'
-    ) {
-      //   AuthService.logout();
-    } else {
-      console.error(error);
-    }
-  }
+const updateOne = async (id: string | number, data: FormData): Promise<Sauce> => {
+  const response = await serverInstance.patch(`/sauces/${id}`, data, {
+    headers: { ...authHeader(), 'Content-Type': 'multipart/form-data' }
+  });
+  return await response.data;
 };
 
 const deleteOne = async (id: string | number) => {

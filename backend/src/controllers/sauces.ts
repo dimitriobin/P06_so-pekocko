@@ -51,7 +51,17 @@ export async function readOneSauce(req: Request, res: Response) {
 export async function updateOneSauce(req: Request, res: Response) {
   try {
     const { id }: { id?: string } = req.params;
-    const sauce = await updateSauce(req.body, id);
+    const sauce = await updateSauce(
+      {
+        ...req.body,
+        ...(req.body.heat && { heat: Number(req.body.heat) }),
+        ...(req.body.userId && { userId: Number(req.body.userId) }),
+        ...(req.file && {
+          imageUrl: req.file ? req.file.filename : null,
+        }),
+      },
+      id
+    );
     res.status(200).json(sauce);
   } catch (error) {
     res.status(404).json({ error: error, message: "Sauce not found" });

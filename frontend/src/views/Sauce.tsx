@@ -8,12 +8,14 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getOne } from '../utils/SaucesServices';
-import { Sauce as ISauce } from '../types/Sauce';
+import { CreateSaucePayload, Sauce as ISauce } from '../types/Sauce';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { RiArrowGoBackFill } from 'react-icons/ri';
 import { isAxiosError } from 'axios';
 import sauceService from '../utils/SaucesServices';
+import { Modal } from '../components/Modal';
+import SauceForm from '../components/SauceForm';
 
 // import AddSauce from "./AddSauce";
 
@@ -51,7 +53,7 @@ function Sauce() {
   const { currentUser, handleLogout } = useAuth();
 
   const [sauce, setSauce] = useState(initSauce);
-  //   const [edit, setEdit] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (!currentUser?.id) {
@@ -78,17 +80,29 @@ function Sauce() {
     return imageObject[k];
   };
 
-  //   const onEditChange = () => {
-  //     setEdit(!edit);
-  //   };
+  const onEditChange = () => {
+    setIsEditing(!isEditing);
+  };
 
-  //   const updateSauce = (data) => {
-  //     SauceDataService.updateOne(props.match.params.id, data)
-  //       .then((response) => {
-  //         setSauce(response.data);
-  //       })
-  //       .catch((error) => console.log(error));
-  //   };
+  const handleUpdate = async (data: Partial<CreateSaucePayload>) => {
+    try {
+      const formdata = new FormData();
+      Object.entries(data).forEach(([k, v]) => {
+        if (v) {
+          if (k === 'imageUrl') {
+            formdata.append('imageUrl', v as File);
+          } else {
+            formdata.append(k, v.toString());
+          }
+        }
+      });
+      const updated = await sauceService.updateOne(sauce.id, formdata);
+      setSauce(updated);
+      setIsEditing(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const onDelete = async () => {
     try {
@@ -99,35 +113,11 @@ function Sauce() {
     }
   };
 
-  //   const onLike = () => {
-  //     const like = sauce.likes > 0 ? 0 : 1;
-  //     SauceDataService.likeOne(props.match.params.id, { userId, like })
-  //       .then((response) => {
-  //         setSauce({
-  //           ...sauce,
-  //           likes: like > 0 ? 1 : 0,
-  //           usersLiked: like > 0 ? [userId] : [],
-  //         });
-  //       })
-  //       .catch((error) => console.log(error));
-  //   };
-
-  //   const onDislike = () => {
-  //     const like = sauce.dislikes > 0 ? 0 : -1;
-  //     SauceDataService.likeOne(props.match.params.id, { userId, like })
-  //       .then((response) => {
-  //         setSauce({
-  //           ...sauce,
-  //           dislikes: like < 0 ? 1 : 0,
-  //           usersDisliked: like < 0 ? [userId] : [],
-  //         });
-  //         console.log(sauce.dislikes);
-  //       })
-  //       .catch((error) => console.log(error));
-  //   };
-
   return (
     <section className="px-10">
+      <Modal open={isEditing} closeModal={() => setIsEditing(false)}>
+        <SauceForm onDataSubmit={handleUpdate} value={sauce} />
+      </Modal>
       <Link to={'/'} className="btn btn-link">
         <RiArrowGoBackFill className="w-6 h-6" />
         Back to all
@@ -136,7 +126,6 @@ function Sauce() {
         src={'http://localhost:3000/' + sauce.imageUrl}
         alt={sauce.description}
         className="w-full aspect-video object-cover"></img>
-      {/* {deleted && <Navigate to="/" replace={true} />} */}
       {/* {edit && <AddSauce value={sauce} showSauceForm={onEditChange} onDataSubmit={updateSauce} />} */}
       <div className="flex justify-between items-center">
         <div className="">
@@ -147,7 +136,7 @@ function Sauce() {
           {currentUser && sauce.userId === currentUser.id && (
             <div className="my-4">
               <button
-                //   onClick={onEditChange}
+                onClick={onEditChange}
                 className="bg-yellow-500 p-3 font-medium rounded-full shadow-lg my-2 mr-2 text-white">
                 update
               </button>

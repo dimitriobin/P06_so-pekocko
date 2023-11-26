@@ -3,19 +3,19 @@
 import { useEffect /* , useState */ } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { CreateSaucePayload, Sauce } from '../types/Sauce';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AddSauceSchema, addSauceSchema } from '../utils/formValidation';
-import Register from '../views/Register';
 
 interface Props {
   value?: Sauce;
   onDataSubmit: (newSauceData: CreateSaucePayload) => void;
 }
 
-function SauceForm({ onDataSubmit }: Props) {
+function SauceForm({ onDataSubmit, value }: Props) {
+  const { currentUser } = useAuth();
+  const userId = currentUser?.id as number;
   const {
-    control,
     register,
     handleSubmit,
     reset,
@@ -23,41 +23,26 @@ function SauceForm({ onDataSubmit }: Props) {
   } = useForm<AddSauceSchema>({
     resolver: zodResolver(addSauceSchema)
   });
-  const { currentUser } = useAuth();
-  const userId = currentUser?.id as number;
 
-  //   const initialSauce = {
-  //     userId,
-  //     name: value ? value.name : '',
-  //     manufacturer: value ? value.manufacturer : '',
-  //     description: value ? value.description : '',
-  //     mainPepper: value ? value.mainPepper : '',
-  //     imageUrl: value ? value.imageUrl : null,
-  //     heat: value ? value.heat : 0
-  //   };
-  //   const [sauce, setSauce] = useState(initialSauce);
-  //   const [preview, setPreview] = useState(value ? value.imageUrl : undefined);
+  useEffect(() => {
+    reset({
+      ...(value && {
+        name: value.name,
+        manufacturer: value.manufacturer,
+        mainPepper: value.mainPepper,
+        heat: value.heat,
+        description: value.description
+      })
+    });
+  }, [value]);
 
   const handleFormSubmit = (data: AddSauceSchema) => {
-    onDataSubmit({ userId, ...data });
-    //     props.onDataSubmit(fd);
-    //     props.showSauceForm(false);
+    onDataSubmit({
+      ...data,
+      userId,
+      imageUrl: data.imageUrl ? data.imageUrl[0] : null
+    });
   };
-
-  //   const handleChange = (e) => {
-  //     if (e.target.name === "imageUrl") {
-  //       setSauce({
-  //         ...sauce,
-  //         imageUrl: e.target.files[0],
-  //       });
-  //       setPreview(URL.createObjectURL(e.target.files[0]));
-  //     } else {
-  //       setSauce({
-  //         ...sauce,
-  //         [e.target.name]: e.target.value,
-  //       });
-  //     }
-  //   };
 
   useEffect(() => {
     reset();
@@ -125,55 +110,19 @@ function SauceForm({ onDataSubmit }: Props) {
         )}
       </div>
 
-      {/* {sauce.imageUrl ? (
-        <label
-          htmlFor="image"
-          className="w-28 h-28 rounded-full font-medium cursor-pointer mb-4 focus:ring focus:ring-yellow-600 focus:ring-offset-4 focus:ring-offset-white focus:outline-none transition-all">
-        //   <img
-        //     src={preview}
-        //     alt="Preview of you sauce"
-        //     className="flex w-28 h-28 rounded-full mb-1 cursor-pointer flex-col justify-center items-center border-2 border-black hover:opacity-90 focus:outline-none transition-all"
-        //   />
-        </label>
-      ) : (
-        <label
-          htmlFor="image"
-          className="w-28 h-28 rounded-full font-medium cursor-pointer mb-4 focus:ring focus:ring-yellow-600 focus:ring-offset-4 focus:ring-offset-white focus:outline-none transition-all">
-          <span className="flex text-center w-28 h-28 rounded-full mb-1 cursor-pointer flex-col justify-center items-center border-2 border-black hover:opacity-90 focus:outline-none transition-all">
-            Add an image
-          </span>
-        </label>
-      )}
-      <input type="file" name="imageUrl" id="image" className="hidden" /> */}
       <div className="form-control w-full mb-2">
         <label htmlFor="image" className="label">
           <span className="label-text">Image</span>
         </label>
-        <Controller
-          name="imageUrl"
-          control={control}
-          render={({ field }) => {
-            return (
-              <>
-                <input
-                  id="image"
-                  type="file"
-                  onChange={(e) => {
-                    field.onChange(e.target.files ? e.target.files[0] : null);
-                  }}
-                  className={`file-input file-input-bordered w-full ${
-                    errors.imageUrl && 'input-error'
-                  }`}
-                />
-                {errors.imageUrl && (
-                  <span className="label-text-alt text-error ml-4 mt-1">
-                    {errors.imageUrl.message}
-                  </span>
-                )}
-              </>
-            );
-          }}
+        <input
+          id="image"
+          type="file"
+          {...register('imageUrl')}
+          className={`file-input file-input-bordered w-full ${errors.imageUrl && 'input-error'}`}
         />
+        {errors.imageUrl && (
+          <span className="label-text-alt text-error ml-4 mt-1">{errors.imageUrl.message}</span>
+        )}
       </div>
 
       <div className="form-control w-full mb-2">

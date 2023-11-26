@@ -154,6 +154,32 @@ export async function updateSauce(
         },
       },
     },
+    include: {
+      _count: {
+        select: {
+          likes: true,
+          dislikes: true,
+        },
+      },
+      likes: {
+        select: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+      dislikes: {
+        select: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
 }
 
