@@ -11,7 +11,7 @@
   "description": "",
   "dependencies": {
     "aws-sdk": "^2.874.0",
-    "bcrypt": "^5.0.1",
+    "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^8.6.0",
     "express": "^4.17.1",
@@ -19,9 +19,9 @@
     "express-session": "^1.17.1",
     "express-slow-down": "^1.4.0",
     "helmet": "^4.5.0",
-    "joi": "^17.4.0",
+    "joi": "^17.7.1",
     "js-yaml": "^3.14.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^5.12.4",
     "mongoose-unique-validator": "^2.0.3",
     "morgan": "^1.10.0",
@@ -29,7 +29,7 @@
     "multer-s3": "^2.9.0",
     "swagger-ui-express": "^4.3.0",
     "toobusy-js": "^0.5.1",
-    "winston": "^3.3.3"
+    "winston": "^3.3.4"
   },
   "devDependencies": {
     "eslint": "^7.22.0",
